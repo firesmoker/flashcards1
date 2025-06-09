@@ -12,9 +12,6 @@ func _ready() -> void:
 	current_note_buttons = note_buttons.get_children()
 	set_level(create_random_level_notes())
 
-func randomize_note() -> void:
-	current_note = get_random_note()
-	#change_displayed_note()
 	
 func change_level_note(new_note: String) -> void:
 	current_note = new_note
@@ -49,8 +46,6 @@ func get_user_input(selected_note: String) -> void:
 	disable_buttons(false)
 	set_level(create_random_level_notes())
 
-func get_random_note() -> String:
-	return notes_bank[randi_range(0,notes_bank.size()-1)]
 
 func set_level(level_array: Array[String]) -> void:
 	change_level_note(level_array[randi_range(0,level_array.size()-1)])
@@ -72,7 +67,6 @@ func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
 		var random_note_index: int = randi_range(0,temporary_notes_bank.size()-1)
 		level_notes.append(temporary_notes_bank[random_note_index])
 		temporary_notes_bank.pop_at(random_note_index)
-	#print(level_notes)
 	return level_notes
 
 func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
