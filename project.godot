@@ -22,3 +22,4 @@ gdscript/warnings/untyped_declaration=2
 [display]
 
 window/size/always_on_top=true
+window/handheld/orientation=6

@@ -5,12 +5,14 @@ var notes_bank: Array[String] = ["A","B","C","D","E","F","G",]
 @onready var note_display: Panel = $"../UI/NoteDisplay"
 @onready var note_name: Label = $"../UI/NoteDisplay/NoteName"
 @onready var note_buttons: Control = $"../UI/NoteButtons"
+@onready var note_image: TextureRect = $"../UI/NoteDisplay/NoteImage"
 var current_note_buttons: Array
 signal ready_for_next_level
 signal success
 signal fail
 
 func _ready() -> void:
+	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
 	current_note_buttons = note_buttons.get_children()
 	set_level(create_random_level_notes())
 
@@ -18,6 +20,11 @@ func _ready() -> void:
 func change_level_note(new_note: String) -> void:
 	current_note = new_note
 	note_name.text = current_note
+	
+
+func toggle_note_name(toggle: bool) -> void:
+	note_name.visible = toggle
+	note_image.visible = !toggle
 	
 
 func determine_success(button_pressed: Button) -> bool:
@@ -44,6 +51,7 @@ func disable_buttons(disabled: bool = true) -> void:
 
 func get_user_input(selected_note: String, button_pressed: Button) -> void:
 	print(button_pressed)
+	toggle_note_name(true)
 	disable_buttons()
 	recieved_note = selected_note
 	determine_success(button_pressed)
@@ -53,6 +61,7 @@ func get_user_input(selected_note: String, button_pressed: Button) -> void:
 
 
 func set_level(level_array: Array[String]) -> void:
+	toggle_note_name(false)
 	change_level_note(level_array[randi_range(0,level_array.size()-1)])
 	change_level_note_buttons(level_array)
 
