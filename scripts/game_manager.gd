@@ -1,4 +1,4 @@
-extends Node2D
+class_name GameManager extends Node2D
 var current_note: String = "A"
 var recieved_note: String
 var notes_bank: Array[String] = ["A","B","C","D","E","F","G",]
@@ -7,6 +7,8 @@ var notes_bank: Array[String] = ["A","B","C","D","E","F","G",]
 @onready var note_buttons: Control = $"../UI/NoteButtons"
 var current_note_buttons: Array
 signal ready_for_next_level
+signal success
+signal fail
 
 func _ready() -> void:
 	current_note_buttons = note_buttons.get_children()
@@ -18,13 +20,15 @@ func change_level_note(new_note: String) -> void:
 	note_name.text = current_note
 	
 
-func determine_success() -> bool:
+func determine_success(button_pressed: Button) -> bool:
 	if recieved_note == current_note:
-		print("success!")
+		emit_signal("success",true, button_pressed)
+		#print("success!")
 		flash_color(Color.GREEN)
 		return true
 	else:
-		print("fail!")
+		emit_signal("success",false, button_pressed)
+		#print("fail!")
 		flash_color(Color.RED)
 		return false
 
@@ -38,10 +42,11 @@ func disable_buttons(disabled: bool = true) -> void:
 			button.mouse_filter = Control.MOUSE_FILTER_STOP
 			
 
-func get_user_input(selected_note: String) -> void:
+func get_user_input(selected_note: String, button_pressed: Button) -> void:
+	print(button_pressed)
 	disable_buttons()
 	recieved_note = selected_note
-	determine_success()
+	determine_success(button_pressed)
 	await ready_for_next_level
 	disable_buttons(false)
 	set_level(create_random_level_notes())
