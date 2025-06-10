@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ltddoqjoj2tw"]
+[gd_scene load_steps=8 format=3 uid="uid://ltddoqjoj2tw"]
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://dw0n7331gd7l0" path="res://NoteRootRegular_Normal.png" id="2_lnu2h"]
@@ -18,6 +18,9 @@ func set_buttons_notes() -> void:
 	for button: NoteButton in get_children():
 		button.change_note(\"G\")
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="Game" type="Node2D"]
 
@@ -84,28 +87,29 @@ offset_right = 160.0
 offset_bottom = 83.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
 
 [node name="NoteImage" type="TextureRect" parent="UI/NoteDisplay"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = 123.0
-offset_top = 171.0
-offset_right = 199.0
-offset_bottom = 231.0
+offset_left = 129.0
+offset_top = 245.0
+offset_right = 194.481
+offset_bottom = 297.0
 texture = ExtResource("2_lnu2h")
 expand_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="UI/NoteDisplay/NoteImage"]
 layout_mode = 0
-offset_left = 54.0
+offset_left = 48.0
 offset_top = 42.0
-offset_right = 250.0
-offset_bottom = 71.0
+offset_right = 244.0
+offset_bottom = 65.0
 rotation = -1.5708
 texture = ExtResource("3_lbhrr")
-metadata/_edit_lock_ = true
 
 [node name="NoteName" type="Label" parent="UI/NoteDisplay"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -122,6 +126,72 @@ theme_override_font_sizes/font_size = 100
 text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Staff" type="Control" parent="UI/NoteDisplay"]
+anchors_preset = 0
+offset_top = 55.0
+offset_right = 320.0
+offset_bottom = 255.0
+metadata/_edit_lock_ = true
+
+[node name="Line1" type="TextureRect" parent="UI/NoteDisplay/Staff"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -203.5
+offset_right = 203.5
+offset_bottom = 20.0
+grow_horizontal = 2
+texture = ExtResource("3_lbhrr")
+metadata/_edit_lock_ = true
+
+[node name="Line2" type="TextureRect" parent="UI/NoteDisplay/Staff"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -43.0
+offset_top = 45.0
+offset_right = 364.0
+offset_bottom = 65.0
+texture = ExtResource("3_lbhrr")
+metadata/_edit_lock_ = true
+
+[node name="Line3" type="TextureRect" parent="UI/NoteDisplay/Staff"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -43.0
+offset_top = 90.0
+offset_right = 364.0
+offset_bottom = 110.0
+texture = ExtResource("3_lbhrr")
+metadata/_edit_lock_ = true
+
+[node name="Line4" type="TextureRect" parent="UI/NoteDisplay/Staff"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -43.0
+offset_top = 135.0
+offset_right = 364.0
+offset_bottom = 155.0
+texture = ExtResource("3_lbhrr")
+metadata/_edit_lock_ = true
+
+[node name="Line5" type="TextureRect" parent="UI/NoteDisplay/Staff"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -203.5
+offset_top = -20.0
+offset_right = 203.5
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_lbhrr")
 metadata/_edit_lock_ = true
 
 [node name="GameManager" type="Node2D" parent="."]

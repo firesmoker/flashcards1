@@ -2,6 +2,10 @@ class_name GameManager extends Node2D
 var current_note: String = "A"
 var recieved_note: String
 var notes_bank: Array[String] = ["A","B","C","D","E","F","G",]
+var notes_locations: Dictionary = {"A":5,"B":6,"C":0,"D":1,"E":2,"F":3,"G":4,}
+var note_step_size: float = 22.5
+var note_y_position: float = 245
+@onready var staff: Control = $"../UI/NoteDisplay/Staff"
 @onready var note_display: Panel = $"../UI/NoteDisplay"
 @onready var note_name: Label = $"../UI/NoteDisplay/NoteName"
 @onready var note_buttons: Control = $"../UI/NoteButtons"
@@ -20,12 +24,19 @@ func _ready() -> void:
 func change_level_note(new_note: String) -> void:
 	current_note = new_note
 	note_name.text = current_note
+	position_note()
 	
 
 func toggle_note_name(toggle: bool) -> void:
 	note_name.visible = toggle
 	note_image.visible = !toggle
+	staff.visible = !toggle
 	
+
+func position_note() -> void:
+	note_image.position.y = note_y_position + note_step_size
+	note_image.position.y -= notes_locations[current_note]*note_step_size
+	print(notes_locations[current_note])
 
 func determine_success(button_pressed: Button) -> bool:
 	if recieved_note == current_note:
