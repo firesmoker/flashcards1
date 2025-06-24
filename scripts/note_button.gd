@@ -3,6 +3,7 @@ class_name NoteButton extends Button
 var _note: String = "A"
 signal note_pressed
 @onready var game_manager: GameManager = %GameManager
+@onready var audio: AudioStreamPlayer2D = $"../../../Audio"
 
 func _ready() -> void:
 	connect("note_pressed",game_manager.get_user_input)
@@ -15,13 +16,18 @@ func change_note(new_note: String = "F") -> void:
 
 func press_button() -> void:
 	emit_signal("note_pressed",_note, self)
+	
 
 func flash_by_succes(success: bool, button_pressed: Button) -> void:
 	if button_pressed == self:
 		if success:
 			flash_color(Color.GREEN)
+			audio.stream = load("res://click2.wav")
+			audio.play()
 		else:
 			flash_color(Color.RED)
+			audio.stream = load("res://wrong1.wav")
+			audio.play()
 
 func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
 	self.modulate = new_color

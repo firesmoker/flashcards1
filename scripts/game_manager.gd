@@ -16,6 +16,7 @@ signal success
 signal fail
 @onready var helper_line: TextureRect = $"../UI/NoteDisplay/NoteImage/HelperLine"
 @onready var stem_axis: Control = $"../UI/NoteDisplay/NoteImage/StemAxis"
+@onready var audio: AudioStreamPlayer2D = $"../Audio"
 
 func _ready() -> void:
 	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
