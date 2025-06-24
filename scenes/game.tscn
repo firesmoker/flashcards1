@@ -84,7 +84,7 @@ anchor_bottom = 0.5
 offset_left = -160.0
 offset_top = -237.0
 offset_right = 160.0
-offset_bottom = 83.0
+offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
@@ -99,14 +99,33 @@ offset_bottom = 297.0
 texture = ExtResource("2_lnu2h")
 expand_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="UI/NoteDisplay/NoteImage"]
+[node name="StemAxis" type="Control" parent="UI/NoteDisplay/NoteImage"]
+anchors_preset = 0
+offset_left = 13.0
+offset_top = 6.0
+offset_right = 53.0
+offset_bottom = 46.0
+pivot_offset = Vector2(20, 20)
+metadata/_edit_lock_ = true
+
+[node name="Stem" type="TextureRect" parent="UI/NoteDisplay/NoteImage/StemAxis"]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 42.0
-offset_right = 244.0
-offset_bottom = 65.0
+offset_left = 35.0
+offset_top = 36.0
+offset_right = 231.0
+offset_bottom = 59.0
 rotation = -1.5708
 texture = ExtResource("3_lbhrr")
+
+[node name="HelperLine" type="TextureRect" parent="UI/NoteDisplay/NoteImage"]
+layout_mode = 0
+offset_left = -31.0
+offset_top = 15.0
+offset_right = 93.0
+offset_bottom = 38.0
+texture = ExtResource("3_lbhrr")
+expand_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="NoteName" type="Label" parent="UI/NoteDisplay"]
 modulate = Color(0, 0, 0, 1)
@@ -130,9 +149,9 @@ metadata/_edit_lock_ = true
 
 [node name="Staff" type="Control" parent="UI/NoteDisplay"]
 anchors_preset = 0
-offset_top = 55.0
+offset_top = 59.0
 offset_right = 320.0
-offset_bottom = 255.0
+offset_bottom = 259.0
 metadata/_edit_lock_ = true
 
 [node name="Line1" type="TextureRect" parent="UI/NoteDisplay/Staff"]
@@ -143,9 +162,10 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -203.5
 offset_right = 203.5
-offset_bottom = 20.0
+offset_bottom = 15.0
 grow_horizontal = 2
 texture = ExtResource("3_lbhrr")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Line2" type="TextureRect" parent="UI/NoteDisplay/Staff"]
@@ -154,8 +174,9 @@ layout_mode = 0
 offset_left = -43.0
 offset_top = 45.0
 offset_right = 364.0
-offset_bottom = 65.0
+offset_bottom = 60.0
 texture = ExtResource("3_lbhrr")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Line3" type="TextureRect" parent="UI/NoteDisplay/Staff"]
@@ -164,8 +185,9 @@ layout_mode = 0
 offset_left = -43.0
 offset_top = 90.0
 offset_right = 364.0
-offset_bottom = 110.0
+offset_bottom = 105.0
 texture = ExtResource("3_lbhrr")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Line4" type="TextureRect" parent="UI/NoteDisplay/Staff"]
@@ -174,8 +196,9 @@ layout_mode = 0
 offset_left = -43.0
 offset_top = 135.0
 offset_right = 364.0
-offset_bottom = 155.0
+offset_bottom = 150.0
 texture = ExtResource("3_lbhrr")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Line5" type="TextureRect" parent="UI/NoteDisplay/Staff"]
@@ -189,9 +212,11 @@ anchor_bottom = 1.0
 offset_left = -203.5
 offset_top = -20.0
 offset_right = 203.5
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("3_lbhrr")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="GameManager" type="Node2D" parent="."]

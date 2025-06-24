@@ -1,8 +1,8 @@
 class_name GameManager extends Node2D
 var current_note: String = "A"
 var recieved_note: String
-var notes_bank: Array[String] = ["A","B","C","D","E","F","G",]
-var notes_locations: Dictionary = {"A":5,"B":6,"C":0,"D":1,"E":2,"F":3,"G":4,}
+var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
+var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
 var note_step_size: float = 22.5
 var note_y_position: float = 245
 @onready var staff: Control = $"../UI/NoteDisplay/Staff"
@@ -14,16 +14,31 @@ var current_note_buttons: Array
 signal ready_for_next_level
 signal success
 signal fail
+@onready var helper_line: TextureRect = $"../UI/NoteDisplay/NoteImage/HelperLine"
+@onready var stem_axis: Control = $"../UI/NoteDisplay/NoteImage/StemAxis"
 
 func _ready() -> void:
 	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
 	current_note_buttons = note_buttons.get_children()
 	set_level(create_random_level_notes())
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		var key_pressed: String = OS.get_keycode_string(event.keycode)
+		print("A key was pressed: ", key_pressed)
+		
+
+func scan_buttons_for_matching_input(note: String) -> void:
+	for button: Button in current_note_buttons:
+		if button is NoteButton:
+			if button._note == note:
+				pass
+		pass
+
 	
 func change_level_note(new_note: String) -> void:
 	current_note = new_note
-	note_name.text = current_note
+	note_name.text = current_note[0]
 	position_note()
 	
 
@@ -31,12 +46,28 @@ func toggle_note_name(toggle: bool) -> void:
 	note_name.visible = toggle
 	note_image.visible = !toggle
 	staff.visible = !toggle
-	
+
+func flip_stem(toggle: bool) -> void:
+	if toggle:
+		stem_axis.rotation = deg_to_rad(180)
+	else:
+		stem_axis.rotation = 0
+
+func set_stem_rotation() -> void:
+	if notes_locations[current_note] >= 6:
+		flip_stem(true)
+	else:
+		flip_stem(false)
 
 func position_note() -> void:
 	note_image.position.y = note_y_position + note_step_size
+	set_stem_rotation()
 	note_image.position.y -= notes_locations[current_note]*note_step_size
-	print(notes_locations[current_note])
+	#print(notes_locations[current_note])
+	if current_note == "C4":
+		helper_line.visible = true
+	else:
+		helper_line.visible = false
 
 func determine_success(button_pressed: Button) -> bool:
 	if recieved_note == current_note:
@@ -61,7 +92,7 @@ func disable_buttons(disabled: bool = true) -> void:
 			
 
 func get_user_input(selected_note: String, button_pressed: Button) -> void:
-	print(button_pressed)
+	#print(button_pressed)
 	toggle_note_name(true)
 	disable_buttons()
 	recieved_note = selected_note
@@ -73,7 +104,11 @@ func get_user_input(selected_note: String, button_pressed: Button) -> void:
 
 func set_level(level_array: Array[String]) -> void:
 	toggle_note_name(false)
-	change_level_note(level_array[randi_range(0,level_array.size()-1)])
+	var new_note: String = level_array[randi_range(0,level_array.size()-1)]
+	while new_note == current_note:
+		print("re randomizing, same note!")
+		new_note = level_array[randi_range(0,level_array.size()-1)]
+	change_level_note(new_note)
 	change_level_note_buttons(level_array)
 
 func change_level_note_buttons(notes_array: Array[String]) -> void:
@@ -99,3 +134,4 @@ func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
 	await get_tree().create_timer(time).timeout
 	emit_signal("ready_for_next_level")
 	note_display.modulate = Color.WHITE
+	

@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func change_note(new_note: String = "F") -> void:
 	_note = new_note
-	text = _note
+	text = _note[0]
 
 func press_button() -> void:
 	emit_signal("note_pressed",_note, self)
