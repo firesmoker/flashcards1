@@ -22,4 +22,10 @@ gdscript/warnings/untyped_declaration=2
 [display]
 
 window/size/always_on_top=true
-window/handheld/orientation=6
+window/handheld/orientation=1
+
+[rendering]
+
+rendering_device/fallback_to_vulkan=false
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

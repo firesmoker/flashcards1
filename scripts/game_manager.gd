@@ -12,11 +12,11 @@ var success_score_bonus: float = 5
 static var max_score: int = 0
 var level_timer: float = 5
 @onready var score_label: Label = $"../UI/ScoreLabel"
-@onready var timer_label: Label = $"../UI/TimerLabel"
+@onready var timer_label: Label = $"../UI/Background/TimerLabel"
 @onready var staff: Control = $"../UI/NoteDisplay/Staff"
 @onready var note_display: Panel = $"../UI/NoteDisplay"
 @onready var note_name: Label = $"../UI/NoteDisplay/NoteName"
-@onready var note_buttons: Control = $"../UI/NoteButtons"
+@onready var note_buttons: Control = $"../UI/Background/NoteButtons"
 @onready var note_image: TextureRect = $"../UI/NoteDisplay/NoteImage"
 @onready var game_over_overlay: Panel = $"../UI/GameOverOverlay"
 
@@ -29,13 +29,24 @@ signal fail
 @onready var audio: AudioStreamPlayer2D = $"../Audio"
 
 func _ready() -> void:
+	current_note_buttons = note_buttons.get_children()
+	note_buttons.size.x = get_viewport_rect().size.x / 2
+	if note_buttons.size.x < get_combined_buttons_width():
+		note_buttons.size.x = get_combined_buttons_width()
+	note_buttons.position.x = (get_viewport_rect().size.x - note_buttons.size.x) / 2
 	game_over_overlay.visible = false
 	score_label.text = "Score: 0"
 	stem_reverse_location_threshold = notes_locations["B4"]
-	ProjectSettings.set_setting("display/window/handheld/orientation", "portrait")
+	#ProjectSettings.set_setting("display/window/handheld/orientation", "portrait")
 	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
-	current_note_buttons = note_buttons.get_children()
 	set_level(create_random_level_notes())
+
+func get_combined_buttons_width() -> float:
+	var combined_width: float = 0
+	for button: Button in current_note_buttons:
+		combined_width += button.size.x
+	print(combined_width)
+	return combined_width
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -47,7 +58,7 @@ func _input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	update_timer(delta)
 	success_time_bonus *= 0.9997
-	print(success_time_bonus)
+	#print(success_time_bonus)
 
 func update_timer(delta: float) -> void:
 	level_timer -= delta
