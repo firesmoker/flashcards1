@@ -26,12 +26,12 @@ func flash_by_succes(success: bool, button_pressed: Button) -> void:
 	if button_pressed == self:
 		if success:
 			flash_color(Color.GREEN)
-			audio.stream = audio.get_sound("click")
-			audio.play()
+			#audio.stream = audio.get_sound("click")
+			#audio.play()
 		else:
 			flash_color(Color.RED)
-			audio.stream = audio.get_sound("wrong")
-			audio.play()
+			#audio.stream = audio.get_sound("wrong")
+			#audio.play()
 
 func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
 	self.modulate = new_color
