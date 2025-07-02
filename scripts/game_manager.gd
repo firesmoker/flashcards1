@@ -128,12 +128,6 @@ func game_over() -> void:
 	input_enabled = false
 	game_over_overlay.visible = true
 
-func scan_buttons_for_matching_input(note: String) -> void:
-	for button: Button in current_note_buttons:
-		if button is NoteButton:
-			if button._note == note:
-				pass
-		pass
 
 func update_score(points: int) -> void:
 	current_score += points
@@ -158,8 +152,8 @@ func determine_success(button_pressed: Button = null) -> bool:
 	if recieved_note == current_note:
 		audio.stream = audio.get_sound("click")
 		audio.play()
-		if button_pressed:
-			emit_signal("success",true, button_pressed)
+		#if button_pressed:
+		emit_signal("success",true, button_pressed)
 		update_score(success_score_bonus)
 		level_timer += success_time_bonus
 		#print("success!")
@@ -171,8 +165,10 @@ func determine_success(button_pressed: Button = null) -> bool:
 	else:
 		audio.stream = audio.get_sound("wrong")
 		audio.play()
+		#if button_pressed:
 		emit_signal("success",false, button_pressed)
 		#print("fail!")
+		note_on_staff.play_failure_effects()
 		await get_tree().create_timer(success_display_time).timeout
 		emit_signal("ready_for_next_level")
 		#flash_color(Color.RED)

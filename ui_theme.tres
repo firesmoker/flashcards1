@@ -1,7 +1,8 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://d07lglt4aywr4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imipj"]
-bg_color = Color(0, 0, 0, 0.258824)
+bg_color = Color(1, 1, 1, 1)
 
 [resource]
+Button/colors/font_disabled_color = Color(0, 0, 0, 1)
 Button/styles/disabled = SubResource("StyleBoxFlat_imipj")

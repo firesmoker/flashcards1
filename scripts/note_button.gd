@@ -39,7 +39,7 @@ func flash_by_succes(success: bool, button_pressed: Button) -> void:
 			#audio.stream = audio.get_sound("wrong")
 			#audio.play()
 	else:
-		modulate = Color(1,1,1,0.2)
+		flash_color(Color(0,0,0,0.5))
 
 func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
 	#add_theme_stylebox_override("disabled",success_stylebox)

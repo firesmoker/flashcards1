@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h3fkxvtmyc1u"
-path="res://.godot/imported/LedgerLine.png-ce1522f783b51e10485a24fb2adcc6fa.ctex"
+uid="uid://d4jl2ceml1s6k"
+path="res://.godot/imported/LedgerLine_Center.png-57ed85113f304bdeb914a934fc4a7389.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://LedgerLine.png"
-dest_files=["res://.godot/imported/LedgerLine.png-ce1522f783b51e10485a24fb2adcc6fa.ctex"]
+source_file="res://LedgerLine_Center.png"
+dest_files=["res://.godot/imported/LedgerLine_Center.png-57ed85113f304bdeb914a934fc4a7389.ctex"]
 
 [params]
 

@@ -1,12 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://ltddoqjoj2tw"]
+[gd_scene load_steps=13 format=3 uid="uid://ltddoqjoj2tw"]
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="1_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dw0n7331gd7l0" path="res://NoteRootRegular_Normal.png" id="2_lnu2h"]
 [ext_resource type="Script" uid="uid://jrd0g2onaav4" path="res://scripts/game_manager.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://de680bnek8upa" path="res://scripts/note_on_staff.gd" id="3_gee14"]
-[ext_resource type="Texture2D" uid="uid://dcvtbkoitk6pw" path="res://LedgerLine.png" id="3_lbhrr"]
+[ext_resource type="Texture2D" uid="uid://h3fkxvtmyc1u" path="res://LedgerLine.png" id="3_lbhrr"]
 [ext_resource type="AudioStream" uid="uid://bqh8wbe5atnvm" path="res://click2.wav" id="5_iywne"]
+[ext_resource type="Texture2D" uid="uid://d4jl2ceml1s6k" path="res://LedgerLine_Center.png" id="6_0tnpc"]
 [ext_resource type="Script" uid="uid://djudq1etxfxjb" path="res://scripts/audio.gd" id="6_p57ef"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
@@ -124,25 +125,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -160.0
+offset_top = -172.5
+offset_right = 160.0
+offset_bottom = 172.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_gee14")
 
 [node name="NoteDisplay" type="Panel" parent="UI/NoteOnStaff"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -237.0
-offset_right = 160.0
-offset_bottom = 108.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
@@ -150,7 +145,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="NoteImage" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay"]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.00869565
+anchor_right = 0.00120521
+anchor_bottom = -0.00869565
 offset_left = 129.0
 offset_top = 245.0
 offset_right = 194.481
@@ -182,11 +181,10 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 0
 offset_left = -31.0
 offset_top = 15.0
-offset_right = 93.0
+offset_right = 98.0
 offset_bottom = 38.0
 texture = ExtResource("3_lbhrr")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="NoteName" type="Label" parent="UI/NoteOnStaff/NoteDisplay"]
 modulate = Color(0, 0, 0, 1)
@@ -209,76 +207,61 @@ vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Staff" type="Control" parent="UI/NoteOnStaff/NoteDisplay"]
+layout_mode = 1
 anchors_preset = 0
 offset_top = 59.0
 offset_right = 320.0
 offset_bottom = 259.0
-metadata/_edit_lock_ = true
 
 [node name="Line1" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay/Staff"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -203.5
-offset_right = 203.5
-offset_bottom = 15.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
 grow_horizontal = 2
-texture = ExtResource("3_lbhrr")
+texture = ExtResource("6_0tnpc")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="Line2" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay/Staff"]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = -43.0
-offset_top = 45.0
-offset_right = 364.0
-offset_bottom = 60.0
-texture = ExtResource("3_lbhrr")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("6_0tnpc")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="Line3" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay/Staff"]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = -43.0
-offset_top = 90.0
-offset_right = 364.0
-offset_bottom = 105.0
-texture = ExtResource("3_lbhrr")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("6_0tnpc")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="Line4" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay/Staff"]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = -43.0
-offset_top = 135.0
-offset_right = 364.0
-offset_bottom = 150.0
-texture = ExtResource("3_lbhrr")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("6_0tnpc")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="Line5" type="TextureRect" parent="UI/NoteOnStaff/NoteDisplay/Staff"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -203.5
-offset_top = -20.0
-offset_right = 203.5
-offset_bottom = -5.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
 grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("3_lbhrr")
+texture = ExtResource("6_0tnpc")
 expand_mode = 1
-metadata/_edit_lock_ = true
 
 [node name="ScoreLabel" type="Label" parent="UI"]
 offset_left = 18.0
