@@ -7,20 +7,46 @@ var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4
 @onready var helper_line: TextureRect = $NoteDisplay/NoteImage/HelperLine
 var stem_reverse_location_threshold: int
 @onready var staff: Control = $NoteDisplay/Staff
+@onready var note_display: Panel = $NoteDisplay
+@onready var stem: TextureRect = $NoteDisplay/NoteImage/StemAxis/Stem
 
 
-#func change_note(new_note: String) -> void:
-	#note = new_note
+func change_note(new_note: String) -> void:
+	note = new_note
+	position_note(new_note)
 
 func _ready() -> void:
 	position_staff_lines()
 	stem_reverse_location_threshold = notes_locations["B4"]
+	game_manager.change_theme.connect(set_element_theme)
 
 func position_staff_lines() -> void:
 	var line_y_position: float = 0
 	for line: TextureRect in staff.get_children():
 		line.position.y = line_y_position
 		line_y_position += note_step_size * 2
+
+
+
+func set_element_theme(theme: String = "light") -> void:
+	match theme:
+		"light":
+			print(self.name + " set to light theme")
+			note_display.self_modulate = game_manager.light_background
+			#note_image.modulate = game_manager.light_theme_note_color
+			set_note_color(game_manager.light_theme_note_color)
+			staff.modulate = game_manager.light_theme_staff_color
+		"dark":
+			print(self.name + " set to light theme")
+			note_display.self_modulate = game_manager.dark_background
+			#note_image.modulate = game_manager.dark_theme_note_color
+			set_note_color(game_manager.dark_theme_note_color)
+			staff.modulate = game_manager.dark_theme_staff_color
+
+func set_note_color(color: Color = Color.BLACK) -> void:
+	note_image.self_modulate = color
+	stem.self_modulate = color
+	helper_line.self_modulate = color
 
 func play_success_effects() -> void:
 	modulate = Color.GREEN
