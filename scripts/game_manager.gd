@@ -8,38 +8,59 @@ var note_step_size: float = 22.5
 var note_y_position: float = 245
 var current_score: int = 0
 var success_time_bonus: float = 2
-var success_score_bonus: float = 5
+var success_score_bonus: float = 10
+var success_display_time: float = 0.5
 static var max_score: int = 0
-var level_timer: float = 5
+var level_timer: float = 10
+var input_enabled: bool = true
 @onready var score_label: Label = $"../UI/ScoreLabel"
 @onready var timer_label: Label = $"../UI/Background/TimerLabel"
-@onready var staff: Control = $"../UI/NoteDisplay/Staff"
-@onready var note_display: Panel = $"../UI/NoteDisplay"
-@onready var note_name: Label = $"../UI/NoteDisplay/NoteName"
+@onready var staff: Control = $"../UI/NoteOnStaff/NoteDisplay/Staff"
+@onready var note_display: Panel = $"../UI/NoteOnStaff/NoteDisplay"
+@onready var note_name: Label = $"../UI/NoteOnStaff/NoteDisplay/NoteName"
 @onready var note_buttons: Control = $"../UI/Background/NoteButtons"
-@onready var note_image: TextureRect = $"../UI/NoteDisplay/NoteImage"
+@onready var note_image: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage"
 @onready var game_over_overlay: Panel = $"../UI/GameOverOverlay"
+@onready var restart_button: Button = $"../UI/GameOverOverlay/RestartButton"
 
 var current_note_buttons: Array
 signal ready_for_next_level
 signal success
 signal fail
-@onready var helper_line: TextureRect = $"../UI/NoteDisplay/NoteImage/HelperLine"
-@onready var stem_axis: Control = $"../UI/NoteDisplay/NoteImage/StemAxis"
+@onready var helper_line: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage/HelperLine"
+@onready var stem_axis: Control = $"../UI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
 @onready var audio: AudioStreamPlayer2D = $"../Audio"
 
 func _ready() -> void:
-	current_note_buttons = note_buttons.get_children()
-	note_buttons.size.x = get_viewport_rect().size.x / 2
-	if note_buttons.size.x < get_combined_buttons_width():
-		note_buttons.size.x = get_combined_buttons_width()
-	note_buttons.position.x = (get_viewport_rect().size.x - note_buttons.size.x) / 2
+	input_enabled = true
+	check_orientation()
+	organize_ui_buttons()
 	game_over_overlay.visible = false
 	score_label.text = "Score: 0"
 	stem_reverse_location_threshold = notes_locations["B4"]
 	#ProjectSettings.set_setting("display/window/handheld/orientation", "portrait")
 	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
 	set_level(create_random_level_notes())
+
+func _notification(what: Variant) -> void:
+	if what == NOTIFICATION_WM_SIZE_CHANGED:
+		check_orientation()
+
+func check_orientation() -> bool:
+	var size: Vector2 = get_viewport().get_visible_rect().size
+	if size.y > size.x:
+		print("Now in Portrait")
+		return true
+	else:
+		print("Now in Landscape")
+		return false
+
+func organize_ui_buttons(landscape: bool = true) -> void:
+	current_note_buttons = note_buttons.get_children()
+	note_buttons.size.x = get_viewport_rect().size.x / 2
+	if note_buttons.size.x < get_combined_buttons_width():
+		note_buttons.size.x = get_combined_buttons_width()
+	note_buttons.position.x = (get_viewport_rect().size.x - note_buttons.size.x) / 2
 
 func get_combined_buttons_width() -> float:
 	var combined_width: float = 0
@@ -49,8 +70,25 @@ func get_combined_buttons_width() -> float:
 	return combined_width
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey and event.pressed and not event.echo and input_enabled:
 		var key_pressed: String = OS.get_keycode_string(event.keycode)
+		match key_pressed:
+			"A":
+				pass
+			"B":
+				pass
+			"C":
+				pass
+			"D":
+				pass
+			"E":
+				pass
+			"F":
+				pass
+			"G":
+				pass
+			_:
+				return
 		print("A key was pressed: ", key_pressed)
 		var note_value: String = key_pressed + "4"
 		get_user_input(note_value)
@@ -58,7 +96,9 @@ func _input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	update_timer(delta)
 	success_time_bonus *= 0.9997
-	#print(success_time_bonus)
+	if success_time_bonus <= success_display_time:
+		success_time_bonus = success_display_time
+	print(success_time_bonus)
 
 func update_timer(delta: float) -> void:
 	level_timer -= delta
@@ -79,6 +119,7 @@ func round_up(num: float) -> float:
 		return new_num
 
 func game_over() -> void:
+	input_enabled = false
 	game_over_overlay.visible = true
 
 func scan_buttons_for_matching_input(note: String) -> void:
@@ -158,7 +199,8 @@ func disable_buttons(disabled: bool = true) -> void:
 
 func get_user_input(selected_note: String, button_pressed: Button = null) -> void:
 	#print(button_pressed)
-	toggle_note_name(true)
+	input_enabled = false
+	#toggle_note_name(true)
 	disable_buttons()
 	recieved_note = selected_note
 	determine_success(button_pressed)
@@ -175,6 +217,7 @@ func set_level(level_array: Array[String]) -> void:
 		new_note = level_array[randi_range(0,level_array.size()-1)]
 	change_level_note(new_note)
 	change_level_note_buttons(level_array)
+	input_enabled = true
 
 func change_level_note_buttons(notes_array: Array[String]) -> void:
 	var number_of_buttons: int = notes_array.size()
@@ -194,9 +237,11 @@ func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
 		temporary_notes_bank.pop_at(random_note_index)
 	return level_notes
 
-func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
+func flash_color(new_color: Color = Color.GREEN, time: float = success_display_time) -> void:
 	note_display.modulate = new_color
 	await get_tree().create_timer(time).timeout
 	emit_signal("ready_for_next_level")
 	note_display.modulate = Color.WHITE
 	
+func restart_game() -> void:
+	get_tree().reload_current_scene()
