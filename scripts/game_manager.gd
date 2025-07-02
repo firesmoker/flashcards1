@@ -3,9 +3,9 @@ var current_note: String = "A"
 var recieved_note: String
 var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
 var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
-var stem_reverse_location_threshold: int
-var note_step_size: float = 22.5
-var note_y_position: float = 245
+#var stem_reverse_location_threshold: int
+#var note_step_size: float = 22.5
+#var note_y_position: float = 245
 var current_score: int = 0
 var success_time_bonus: float = 2
 var success_score_bonus: float = 10
@@ -13,10 +13,12 @@ var success_display_time: float = 0.5
 static var max_score: int = 0
 var level_timer: float = 10
 var input_enabled: bool = true
+@onready var note_on_staff: NoteOnStaff = $"../UI/NoteOnStaff"
+
 @onready var score_label: Label = $"../UI/ScoreLabel"
 @onready var timer_label: Label = $"../UI/Background/TimerLabel"
 @onready var staff: Control = $"../UI/NoteOnStaff/NoteDisplay/Staff"
-@onready var note_display: Panel = $"../UI/NoteOnStaff/NoteDisplay"
+#@onready var note_display: Panel = $"../UI/NoteOnStaff/NoteDisplay"
 @onready var note_name: Label = $"../UI/NoteOnStaff/NoteDisplay/NoteName"
 @onready var note_buttons: Control = $"../UI/Background/NoteButtons"
 @onready var note_image: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage"
@@ -37,10 +39,41 @@ func _ready() -> void:
 	organize_ui_buttons()
 	game_over_overlay.visible = false
 	score_label.text = "Score: 0"
-	stem_reverse_location_threshold = notes_locations["B4"]
+	#stem_reverse_location_threshold = notes_locations["B4"]
 	#ProjectSettings.set_setting("display/window/handheld/orientation", "portrait")
 	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
 	set_level(create_random_level_notes())
+
+func _process(delta: float) -> void:
+	update_timer(delta)
+	success_time_bonus *= 0.9997
+	if success_time_bonus <= success_display_time:
+		success_time_bonus = success_display_time
+	print(success_time_bonus)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and input_enabled:
+		var key_pressed: String = OS.get_keycode_string(event.keycode)
+		match key_pressed:
+			"A":
+				pass
+			"B":
+				pass
+			"C":
+				pass
+			"D":
+				pass
+			"E":
+				pass
+			"F":
+				pass
+			"G":
+				pass
+			_:
+				return
+		print("A key was pressed: ", key_pressed)
+		var note_value: String = key_pressed + "4"
+		get_user_input(note_value)
 
 func _notification(what: Variant) -> void:
 	if what == NOTIFICATION_WM_SIZE_CHANGED:
@@ -69,36 +102,9 @@ func get_combined_buttons_width() -> float:
 	print(combined_width)
 	return combined_width
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and input_enabled:
-		var key_pressed: String = OS.get_keycode_string(event.keycode)
-		match key_pressed:
-			"A":
-				pass
-			"B":
-				pass
-			"C":
-				pass
-			"D":
-				pass
-			"E":
-				pass
-			"F":
-				pass
-			"G":
-				pass
-			_:
-				return
-		print("A key was pressed: ", key_pressed)
-		var note_value: String = key_pressed + "4"
-		get_user_input(note_value)
 
-func _process(delta: float) -> void:
-	update_timer(delta)
-	success_time_bonus *= 0.9997
-	if success_time_bonus <= success_display_time:
-		success_time_bonus = success_display_time
-	print(success_time_bonus)
+
+
 
 func update_timer(delta: float) -> void:
 	level_timer -= delta
@@ -138,7 +144,8 @@ func update_score(points: int) -> void:
 func change_level_note(new_note: String) -> void:
 	current_note = new_note
 	note_name.text = current_note[0]
-	position_note()
+	note_on_staff.position_note(current_note)
+	#position_note()
 	
 
 func toggle_note_name(toggle: bool) -> void:
@@ -146,27 +153,6 @@ func toggle_note_name(toggle: bool) -> void:
 	note_image.visible = !toggle
 	staff.visible = !toggle
 
-func flip_stem(toggle: bool) -> void:
-	if toggle:
-		stem_axis.rotation = deg_to_rad(180)
-	else:
-		stem_axis.rotation = 0
-
-func set_stem_rotation() -> void:
-	if notes_locations[current_note] >= stem_reverse_location_threshold:
-		flip_stem(true)
-	else:
-		flip_stem(false)
-
-func position_note() -> void:
-	note_image.position.y = note_y_position + note_step_size
-	set_stem_rotation()
-	note_image.position.y -= notes_locations[current_note]*note_step_size
-	#print(notes_locations[current_note])
-	if current_note == "C4":
-		helper_line.visible = true
-	else:
-		helper_line.visible = false
 
 func determine_success(button_pressed: Button = null) -> bool:
 	if recieved_note == current_note:
@@ -177,14 +163,19 @@ func determine_success(button_pressed: Button = null) -> bool:
 		update_score(success_score_bonus)
 		level_timer += success_time_bonus
 		#print("success!")
-		flash_color(Color.GREEN)
+		#flash_color(Color.GREEN)
+		note_on_staff.play_success_effects()
+		await get_tree().create_timer(success_display_time).timeout
+		emit_signal("ready_for_next_level")
 		return true
 	else:
 		audio.stream = audio.get_sound("wrong")
 		audio.play()
 		emit_signal("success",false, button_pressed)
 		#print("fail!")
-		flash_color(Color.RED)
+		await get_tree().create_timer(success_display_time).timeout
+		emit_signal("ready_for_next_level")
+		#flash_color(Color.RED)
 		return false
 
 func disable_buttons(disabled: bool = true) -> void:
@@ -236,12 +227,6 @@ func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
 		level_notes.append(temporary_notes_bank[random_note_index])
 		temporary_notes_bank.pop_at(random_note_index)
 	return level_notes
-
-func flash_color(new_color: Color = Color.GREEN, time: float = success_display_time) -> void:
-	note_display.modulate = new_color
-	await get_tree().create_timer(time).timeout
-	emit_signal("ready_for_next_level")
-	note_display.modulate = Color.WHITE
 	
 func restart_game() -> void:
 	get_tree().reload_current_scene()
