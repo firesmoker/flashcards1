@@ -1,0 +1,163 @@
+[gd_scene load_steps=6 format=3 uid="uid://chc5qyesyhvcs"]
+
+[ext_resource type="Script" uid="uid://de680bnek8upa" path="res://scripts/note_on_staff.gd" id="1_ucp1e"]
+[ext_resource type="Texture2D" uid="uid://dw0n7331gd7l0" path="res://NoteRootRegular_Normal.png" id="2_2uqeo"]
+[ext_resource type="Texture2D" uid="uid://h3fkxvtmyc1u" path="res://LedgerLine.png" id="3_m7eil"]
+[ext_resource type="Texture2D" uid="uid://d4jl2ceml1s6k" path="res://LedgerLine_Center.png" id="4_m2hpl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
+bg_color = Color(1, 1, 1, 1)
+
+[node name="NoteOnStaff" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -172.5
+offset_right = 160.0
+offset_bottom = 172.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ucp1e")
+
+[node name="NoteDisplay" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
+metadata/_edit_use_anchors_ = true
+
+[node name="NoteImage" type="TextureRect" parent="NoteDisplay"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.00869565
+anchor_right = 0.00120521
+anchor_bottom = -0.00869565
+offset_left = 129.0
+offset_top = 245.0
+offset_right = 194.481
+offset_bottom = 297.0
+texture = ExtResource("2_2uqeo")
+expand_mode = 3
+
+[node name="StemAxis" type="Control" parent="NoteDisplay/NoteImage"]
+anchors_preset = 0
+offset_left = 13.0
+offset_top = 6.0
+offset_right = 53.0
+offset_bottom = 46.0
+pivot_offset = Vector2(20, 20)
+metadata/_edit_lock_ = true
+
+[node name="Stem" type="TextureRect" parent="NoteDisplay/NoteImage/StemAxis"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 35.0
+offset_top = 36.0
+offset_right = 231.0
+offset_bottom = 59.0
+rotation = -1.5708
+texture = ExtResource("3_m7eil")
+metadata/_edit_use_anchors_ = true
+
+[node name="HelperLine" type="TextureRect" parent="NoteDisplay/NoteImage"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -31.0
+offset_top = 15.0
+offset_right = 98.0
+offset_bottom = 38.0
+texture = ExtResource("3_m7eil")
+expand_mode = 1
+
+[node name="Shine" type="TextureRect" parent="NoteDisplay/NoteImage"]
+self_modulate = Color(1, 1, 1, 0.334)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 9.5
+offset_right = 29.0
+offset_bottom = 24.5
+texture = ExtResource("2_2uqeo")
+expand_mode = 2
+
+[node name="NoteName" type="Label" parent="NoteDisplay"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -39.0
+offset_right = 46.5
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Staff" type="Control" parent="NoteDisplay"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 0
+offset_top = 59.0
+offset_right = 320.0
+offset_bottom = 259.0
+metadata/_edit_lock_ = true
+
+[node name="Line1" type="TextureRect" parent="NoteDisplay/Staff"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("4_m2hpl")
+expand_mode = 1
+
+[node name="Line2" type="TextureRect" parent="NoteDisplay/Staff"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("4_m2hpl")
+expand_mode = 1
+
+[node name="Line3" type="TextureRect" parent="NoteDisplay/Staff"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("4_m2hpl")
+expand_mode = 1
+
+[node name="Line4" type="TextureRect" parent="NoteDisplay/Staff"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("4_m2hpl")
+expand_mode = 1
+
+[node name="Line5" type="TextureRect" parent="NoteDisplay/Staff"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+texture = ExtResource("4_m2hpl")
+expand_mode = 1

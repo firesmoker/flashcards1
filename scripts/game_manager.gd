@@ -1,4 +1,5 @@
 class_name GameManager extends Node2D
+@onready var flash_cards: Node2D = $FlashCards
 
 var dark_background: Color = Color(0.078,0.122,0.141)
 var light_background: Color = Color(1,1,0.992)
@@ -11,7 +12,7 @@ var light_theme_staff_color: Color = Color(0.078,0.122,0.141,0.55)
 #var current_note: String = "A"
 var recieved_note: String
 var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
-var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
+#var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
 #var stem_reverse_location_threshold: int
 #var note_step_size: float = 22.5
 #var note_y_position: float = 245
@@ -57,10 +58,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	update_timer(delta)
-	success_time_bonus *= 0.9997
+	adjust_success_time_bonus(delta)
+
+func adjust_success_time_bonus(delta: float) -> void:
+	success_time_bonus *= 0.9997 * delta
 	if success_time_bonus <= success_display_time:
 		success_time_bonus = success_display_time
-	#print(success_time_bonus)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and input_enabled:
@@ -205,9 +208,7 @@ func disable_buttons(disabled: bool = true) -> void:
 			
 
 func get_user_input(selected_note: String, button_pressed: Button = null) -> void:
-	#print(button_pressed)
 	input_enabled = false
-	#toggle_note_name(true)
 	disable_buttons()
 	recieved_note = selected_note
 	determine_success(button_pressed)

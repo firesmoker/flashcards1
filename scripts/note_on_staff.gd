@@ -3,9 +3,8 @@ class_name NoteOnStaff extends NoteElement
 @onready var note_image: TextureRect = $NoteDisplay/NoteImage
 var note_y_position: float = 241
 var note_step_size: float = 22.5
-var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
+#var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
 @onready var helper_line: TextureRect = $NoteDisplay/NoteImage/HelperLine
-var stem_reverse_location_threshold: int
 @onready var staff: Control = $NoteDisplay/Staff
 @onready var note_display: Panel = $NoteDisplay
 @onready var stem: TextureRect = $NoteDisplay/NoteImage/StemAxis/Stem
@@ -17,7 +16,6 @@ func change_note(new_note: String) -> void:
 
 func _ready() -> void:
 	position_staff_lines()
-	stem_reverse_location_threshold = notes_locations["B4"]
 	game_manager.change_theme.connect(set_element_theme)
 
 func position_staff_lines() -> void:
@@ -67,7 +65,7 @@ func flip_stem(toggle: bool) -> void:
 func position_note(new_note: String) -> void:
 	note_image.position.y = note_y_position + note_step_size
 	set_stem_rotation(new_note)
-	note_image.position.y -= notes_locations[new_note]*note_step_size
+	note_image.position.y -= notes_properties[new_note]["location"]*note_step_size
 	#print(notes_locations[current_note])
 	if new_note == "C4":
 		helper_line.visible = true
@@ -76,7 +74,7 @@ func position_note(new_note: String) -> void:
 
 
 func set_stem_rotation(new_note: String) -> void:
-	if notes_locations[new_note] >= stem_reverse_location_threshold:
+	if notes_properties[new_note]["location"] >= stem_reverse_location_threshold:
 		flip_stem(true)
 	else:
 		flip_stem(false)
