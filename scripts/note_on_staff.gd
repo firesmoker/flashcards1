@@ -10,11 +10,17 @@ var note_step_size: float = 22.5
 @onready var stem: TextureRect = $NoteDisplay/NoteImage/StemAxis/Stem
 
 
+func change_note_color(color: Color) -> void:
+	note_image.self_modulate = color
+	stem.self_modulate = color
+	helper_line.self_modulate = color
+
 func change_note(new_note: String) -> void:
 	note = new_note
 	position_note(new_note)
 
 func _ready() -> void:
+	stem_reverse_location_threshold = notes_properties["B4"]["location"]
 	position_staff_lines()
 	game_manager.change_theme.connect(set_element_theme)
 
@@ -47,9 +53,9 @@ func set_note_color(color: Color = Color.BLACK) -> void:
 	helper_line.self_modulate = color
 
 func play_success_effects() -> void:
-	modulate = Color.GREEN
+	change_note_color(notes_properties[note]["color"])
 	await get_tree().create_timer(0.5).timeout
-	modulate = Color.WHITE
+	change_note_color(Color.BLACK)
 
 func play_failure_effects() -> void:
 	modulate = Color.RED
@@ -74,6 +80,7 @@ func position_note(new_note: String) -> void:
 
 
 func set_stem_rotation(new_note: String) -> void:
+	print(stem_reverse_location_threshold)
 	if notes_properties[new_note]["location"] >= stem_reverse_location_threshold:
 		flip_stem(true)
 	else:

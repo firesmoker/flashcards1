@@ -1,6 +1,6 @@
 class_name NoteButton extends Button
 
-var _note: String = "A"
+var note: String = "A"
 signal note_pressed
 @onready var game_manager: GameManager = %GameManager
 #@onready var audio: Audio = $"../../../Audio"
@@ -20,18 +20,19 @@ func _ready() -> void:
 	game_manager.success.connect(flash_by_succes)
 
 func change_note(new_note: String = "F") -> void:
-	_note = new_note
-	text = _note[0]
+	note = new_note
+	text = note[0]
 	modulate = Color.WHITE
 
 func press_button() -> void:
-	emit_signal("note_pressed",_note, self)
+	emit_signal("note_pressed",note, self)
 	
 
 func flash_by_succes(success: bool, button_pressed: Button) -> void:
 	if button_pressed == self:
 		if success:
-			flash_color(Color.GREEN)
+			print(NoteElement.notes_properties[button_pressed.note]["color"])
+			flash_color(NoteElement.notes_properties[button_pressed.note]["color"])
 			#audio.stream = audio.get_sound("click")
 			#audio.play()
 		else:
