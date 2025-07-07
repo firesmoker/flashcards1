@@ -6,9 +6,9 @@ static var notes_properties: Dictionary = {
 	"A4":{"location":5,"color": Color(0,0.697,0.697)},
 	"B4":{"location":6,"color": Color(0,0.697,0.697)},
 	"C4":{"location":0,"color": Color.MEDIUM_PURPLE},
-	"D4":{"location":1,"color": Color(0,0.697,0.697)},
-	"E4":{"location":2,"color": Color(0,0.697,0.697)},
-	"F4":{"location":3,"color": Color(0,0.697,0.697)},
+	"D4":{"location":1,"color": Color.ORANGE},
+	"E4":{"location":2,"color": Color.SEA_GREEN},
+	"F4":{"location":3,"color": Color.MEDIUM_VIOLET_RED},
 	"G4":{"location":4,"color": Color(0,0.697,0.697)},
 }
 static var stem_reverse_location_threshold: int

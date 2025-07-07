@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ltddoqjoj2tw"]
+[gd_scene load_steps=12 format=3 uid="uid://ltddoqjoj2tw"]
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="1_u5sy4"]
@@ -22,6 +22,8 @@ func set_buttons_notes() -> void:
 	for button: NoteButton in get_children():
 		button.change_note(\"G\")
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gee14"]
 
 [node name="Game" type="Node2D"]
 
@@ -143,12 +145,13 @@ text = "Score: "
 metadata/_edit_use_anchors_ = true
 
 [node name="GameOverOverlay" type="Panel" parent="UI"]
-visible = false
+z_index = 100
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gee14")
 
 [node name="Label" type="Label" parent="UI/GameOverOverlay"]
 self_modulate = Color(0, 0, 0, 1)

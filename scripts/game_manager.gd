@@ -35,6 +35,8 @@ var input_enabled: bool = true
 @onready var game_over_overlay: Panel = $"../UI/GameOverOverlay"
 @onready var restart_button: Button = $"../UI/GameOverOverlay/RestartButton"
 
+var chosen_element1: Variant
+var chosen_element2: Variant
 var current_note_buttons: Array
 signal ready_for_next_level
 signal success
@@ -170,11 +172,21 @@ func toggle_note_name(toggle: bool) -> void:
 	note_image.visible = !toggle
 	staff.visible = !toggle
 
+func determine_match_success(element1: Variant, element2: Variant) -> bool:
+	return element1.note == element2.note
+		#emit_signal("success",true, element1,element2)
+		#return true
+	#else:
+		#return false
+
+func choose_element(element: Variant) -> void:
+	pass
+		
 
 func determine_success(button_pressed: Button = null) -> bool:
 	if recieved_note == note_on_staff.note:
-		audio.stream = audio.get_sound("click")
-		audio.play()
+		#audio.stream = audio.get_sound("click")
+		#audio.play()
 		#if button_pressed:
 		emit_signal("success",true, button_pressed)
 		update_score(success_score_bonus)
@@ -186,8 +198,8 @@ func determine_success(button_pressed: Button = null) -> bool:
 		emit_signal("ready_for_next_level")
 		return true
 	else:
-		audio.stream = audio.get_sound("wrong")
-		audio.play()
+		#audio.stream = audio.get_sound("wrong")
+		#audio.play()
 		#if button_pressed:
 		emit_signal("success",false, button_pressed)
 		#print("fail!")
@@ -207,15 +219,27 @@ func disable_buttons(disabled: bool = true) -> void:
 			button.mouse_filter = Control.MOUSE_FILTER_STOP
 			
 
+func get_user_input_new(element: Variant) -> void:
+	choose_element(element)
+
 func get_user_input(selected_note: String, button_pressed: Button = null) -> void:
 	input_enabled = false
 	disable_buttons()
 	recieved_note = selected_note
+	play_note(recieved_note)
 	determine_success(button_pressed)
 	await ready_for_next_level
 	disable_buttons(false)
 	set_flash_cards_level(create_random_level_notes())
 
+
+func play_note(note: String) -> void:
+	var octave: String = note[1]
+	print(octave)
+	var note_name: String = note[0]
+	print(note_name)
+	audio.stream = load("res://audio/"+octave+"-"+note_name+".ogg")
+	audio.play()
 
 func set_flash_cards_level(level_array: Array[String]) -> void:
 	toggle_note_name(false)

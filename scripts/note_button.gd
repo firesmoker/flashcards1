@@ -25,6 +25,7 @@ func change_note(new_note: String = "F") -> void:
 	modulate = Color.WHITE
 
 func press_button() -> void:
+	Input.vibrate_handheld(10)
 	emit_signal("note_pressed",note, self)
 	
 
