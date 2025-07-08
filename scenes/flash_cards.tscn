@@ -1,0 +1,203 @@
+[gd_scene load_steps=11 format=3 uid="uid://domprmop5m1di"]
+
+[ext_resource type="Script" uid="uid://psxh0dfvvojf" path="res://scenes/flash_cards.gd" id="1_ofagi"]
+[ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="2_jmqm5"]
+[ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="3_7bdrg"]
+[ext_resource type="Script" uid="uid://dvit68xy04kto" path="res://scripts/note_container.gd" id="4_fowxl"]
+[ext_resource type="PackedScene" uid="uid://chc5qyesyhvcs" path="res://scenes/note_on_staff.tscn" id="5_507bm"]
+[ext_resource type="AudioStream" uid="uid://bqh8wbe5atnvm" path="res://click2.wav" id="6_b1oan"]
+[ext_resource type="Script" uid="uid://djudq1etxfxjb" path="res://scripts/audio.gd" id="7_u7qjq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0h60w"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="GDScript" id="GDScript_r08gg"]
+script/source = "extends Control
+
+func _ready() -> void:
+	set_buttons_notes()
+
+func set_buttons_notes() -> void:
+	for button: NoteButton in get_children():
+		button.change_note(\"G\")
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aiyse"]
+
+[node name="FlashCards" type="Node2D"]
+script = ExtResource("1_ofagi")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Background" type="Panel" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0h60w")
+metadata/_edit_lock_ = true
+
+[node name="TimerLabel" type="Label" parent="UI/Background"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -251.0
+offset_bottom = 83.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 60
+text = "Time"
+metadata/_edit_use_anchors_ = true
+
+[node name="NoteButtons" type="Control" parent="UI/Background"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_right = 500.0
+grow_horizontal = 2
+grow_vertical = 0
+script = SubResource("GDScript_r08gg")
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="UI/Background/NoteButtons"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -76.0
+offset_right = 234.0
+grow_vertical = 0
+focus_mode = 0
+theme = ExtResource("2_jmqm5")
+theme_override_font_sizes/font_size = 40
+text = "C"
+script = ExtResource("3_7bdrg")
+
+[node name="Button2" type="Button" parent="UI/Background/NoteButtons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -117.0
+offset_top = -76.0
+offset_right = 117.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme = ExtResource("2_jmqm5")
+theme_override_font_sizes/font_size = 40
+text = "D"
+script = ExtResource("3_7bdrg")
+metadata/_edit_use_anchors_ = true
+
+[node name="Button3" type="Button" parent="UI/Background/NoteButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -234.0
+offset_top = -76.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme = ExtResource("2_jmqm5")
+theme_override_font_sizes/font_size = 40
+text = "E"
+script = ExtResource("3_7bdrg")
+metadata/_edit_use_anchors_ = true
+
+[node name="NoteContainer" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -172.5
+offset_right = 160.0
+offset_bottom = 172.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_fowxl")
+note_on_staff = ExtResource("5_507bm")
+
+[node name="NoteOnStaff" parent="UI" instance=ExtResource("5_507bm")]
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 18.0
+offset_top = 23.0
+offset_right = 210.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 60
+text = "Score: "
+metadata/_edit_use_anchors_ = true
+
+[node name="GameOverOverlay" type="Panel" parent="UI"]
+visible = false
+z_index = 100
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_aiyse")
+
+[node name="Label" type="Label" parent="UI/GameOverOverlay"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+
+[node name="RestartButton" type="Button" parent="UI/GameOverOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.5
+offset_top = 73.0
+offset_right = 126.5
+offset_bottom = 177.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = "Restart"
+
+[node name="TimerBar" type="ProgressBar" parent="UI"]
+modulate = Color(1, 0.435294, 0.25098, 1)
+offset_left = 1054.0
+offset_top = 451.0
+offset_right = 1394.0
+offset_bottom = 502.0
+rotation = -1.5708
+max_value = 20.0
+value = 20.0
+show_percentage = false
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_b1oan")
+script = ExtResource("7_u7qjq")

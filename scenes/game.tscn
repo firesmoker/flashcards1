@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ltddoqjoj2tw"]
+[gd_scene load_steps=11 format=3 uid="uid://ltddoqjoj2tw"]
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="1_u5sy4"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://chc5qyesyhvcs" path="res://scenes/note_on_staff.tscn" id="3_p57ef"]
 [ext_resource type="Script" uid="uid://dvit68xy04kto" path="res://scripts/note_container.gd" id="3_u5sy4"]
 [ext_resource type="AudioStream" uid="uid://bqh8wbe5atnvm" path="res://click2.wav" id="5_iywne"]
-[ext_resource type="Script" uid="uid://psxh0dfvvojf" path="res://scenes/flash_cards.gd" id="6_gee14"]
 [ext_resource type="Script" uid="uid://djudq1etxfxjb" path="res://scripts/audio.gd" id="6_p57ef"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
@@ -48,7 +47,7 @@ offset_left = -251.0
 offset_bottom = 83.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 60
-text = "Time: "
+text = "Time"
 metadata/_edit_use_anchors_ = true
 
 [node name="NoteButtons" type="Control" parent="UI/Background"]
@@ -145,6 +144,7 @@ text = "Score: "
 metadata/_edit_use_anchors_ = true
 
 [node name="GameOverOverlay" type="Panel" parent="UI"]
+visible = false
 z_index = 100
 anchors_preset = 15
 anchor_right = 1.0
@@ -186,12 +186,20 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 70
 text = "Restart"
 
+[node name="TimerBar" type="ProgressBar" parent="UI"]
+modulate = Color(1, 0.435294, 0.25098, 1)
+offset_left = 1054.0
+offset_top = 451.0
+offset_right = 1394.0
+offset_bottom = 502.0
+rotation = -1.5708
+max_value = 20.0
+value = 20.0
+show_percentage = false
+
 [node name="GameManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_yqjtg")
-
-[node name="FlashCards" type="Node2D" parent="GameManager"]
-script = ExtResource("6_gee14")
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_iywne")

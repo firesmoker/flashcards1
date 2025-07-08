@@ -7,36 +7,34 @@ var dark_theme_note_color: Color = Color(1,1,0.992)
 var light_theme_note_color: Color = Color(0.078,0.122,0.141)
 var dark_theme_staff_color: Color = Color(1,1,0.992,0.55)
 var light_theme_staff_color: Color = Color(0.078,0.122,0.141,0.55)
+var mode: Array[String] = ["level_timer","note_timer"]
 @onready var background: Panel = $"../UI/Background"
+@onready var timer_bar: ProgressBar = $"../UI/TimerBar"
 
-#var current_note: String = "A"
 var recieved_note: String
 var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
-#var notes_locations: Dictionary = {"A4":5,"B4":6,"C4":0,"D4":1,"E4":2,"F4":3,"G4":4,}
-#var stem_reverse_location_threshold: int
-#var note_step_size: float = 22.5
-#var note_y_position: float = 245
 var current_score: int = 0
-var success_time_bonus: float = 2
+var success_time_bonus: float = 1
 var success_score_bonus: float = 10
 var success_display_time: float = 0.5
 static var max_score: int = 0
-var level_timer: float = 10
+var level_timer: float = 20
+var max_level_timer: float = 20
 var input_enabled: bool = true
+var timer_paused: bool = false
 @onready var note_on_staff: NoteElement = $"../UI/NoteOnStaff"
 
 @onready var score_label: Label = $"../UI/ScoreLabel"
 @onready var timer_label: Label = $"../UI/Background/TimerLabel"
 @onready var staff: Control = $"../UI/NoteOnStaff/NoteDisplay/Staff"
-#@onready var note_display: Panel = $"../UI/NoteOnStaff/NoteDisplay"
 @onready var note_name: Label = $"../UI/NoteOnStaff/NoteDisplay/NoteName"
 @onready var note_buttons: Control = $"../UI/Background/NoteButtons"
 @onready var note_image: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage"
 @onready var game_over_overlay: Panel = $"../UI/GameOverOverlay"
 @onready var restart_button: Button = $"../UI/GameOverOverlay/RestartButton"
 
-var chosen_element1: Variant
-var chosen_element2: Variant
+var chosen_element1: NoteElement
+var chosen_element2: NoteElement
 var current_note_buttons: Array
 signal ready_for_next_level
 signal success
@@ -47,20 +45,21 @@ signal change_theme
 @onready var audio: AudioStreamPlayer2D = $"../Audio"
 
 func _ready() -> void:
+	initialize_ui()
+	set_flash_cards_level(create_random_level_notes())
+	choose_element(note_on_staff)
+
+func _process(delta: float) -> void:
+	update_timer(delta)
+	#adjust_success_time_bonus(delta)
+
+func initialize_ui() -> void:
 	set_ui_theme("light")
 	input_enabled = true
 	check_orientation()
 	organize_ui_buttons()
 	game_over_overlay.visible = false
 	score_label.text = "Score: 0"
-	#stem_reverse_location_threshold = notes_locations["B4"]
-	#ProjectSettings.set_setting("display/window/handheld/orientation", "portrait")
-	#DisplayServer.screen_set_orientation(DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE)
-	set_flash_cards_level(create_random_level_notes())
-
-func _process(delta: float) -> void:
-	update_timer(delta)
-	adjust_success_time_bonus(delta)
 
 func adjust_success_time_bonus(delta: float) -> void:
 	success_time_bonus *= 0.9997 * delta
@@ -89,6 +88,7 @@ func _input(event: InputEvent) -> void:
 				return
 		print("A key was pressed: ", key_pressed)
 		var note_value: String = key_pressed + "4"
+		play_note(note_value)
 		get_user_input(note_value)
 
 func _notification(what: Variant) -> void:
@@ -129,12 +129,14 @@ func set_ui_theme(theme: String = "light") -> void:
 			emit_signal("change_theme","dark")
 
 
-func update_timer(delta: float) -> void:
-	level_timer -= delta
+func update_timer(delta: float, round: bool = true) -> void:
+	if not timer_paused:
+		level_timer -= delta
 	var display_timer: int = round_up(level_timer)
 	if display_timer < 0:
 		display_timer = 0
-	timer_label.text = "Time: " + var_to_str(display_timer)
+	#timer_label.text = "Time: " + var_to_str(display_timer)
+	timer_bar.value = display_timer
 	#print(level_timer)
 	if level_timer <= 0:
 		game_over()
@@ -159,12 +161,9 @@ func update_score(points: int) -> void:
 		max_score = current_score
 	
 func change_level_note(new_note: String) -> void:
-	#current_note = new_note
-	note_on_staff.note = new_note
-	#note_name.text = current_note[0]
-	note_name.text = note_on_staff.note[0]
+	#note_on_staff.note = new_note
+	#note_name.text = note_on_staff.note[0]
 	note_on_staff.change_note(new_note)
-	#position_note()
 	
 
 func toggle_note_name(toggle: bool) -> void:
@@ -172,42 +171,60 @@ func toggle_note_name(toggle: bool) -> void:
 	note_image.visible = !toggle
 	staff.visible = !toggle
 
-func determine_match_success(element1: Variant, element2: Variant) -> bool:
-	return element1.note == element2.note
-		#emit_signal("success",true, element1,element2)
-		#return true
-	#else:
-		#return false
-
-func choose_element(element: Variant) -> void:
-	pass
-		
-
 func determine_success(button_pressed: Button = null) -> bool:
 	if recieved_note == note_on_staff.note:
-		#audio.stream = audio.get_sound("click")
-		#audio.play()
-		#if button_pressed:
 		emit_signal("success",true, button_pressed)
 		update_score(success_score_bonus)
 		level_timer += success_time_bonus
-		#print("success!")
-		#flash_color(Color.GREEN)
+		if level_timer >= max_level_timer:
+			level_timer = max_level_timer
 		note_on_staff.play_success_effects()
 		await get_tree().create_timer(success_display_time).timeout
 		emit_signal("ready_for_next_level")
 		return true
 	else:
-		#audio.stream = audio.get_sound("wrong")
-		#audio.play()
-		#if button_pressed:
 		emit_signal("success",false, button_pressed)
-		#print("fail!")
 		note_on_staff.play_failure_effects()
 		await get_tree().create_timer(success_display_time).timeout
 		emit_signal("ready_for_next_level")
-		#flash_color(Color.RED)
 		return false
+
+func determine_success_new() -> void:
+	if compare_elements():
+		print("compare elements successful " + chosen_element1.note + " " + chosen_element2.note)
+		#emit_signal("success",true, button_pressed)
+		update_score(success_score_bonus)
+		level_timer += success_time_bonus
+		if level_timer >= max_level_timer:
+			level_timer = max_level_timer
+		note_on_staff.play_success_effects()
+		await get_tree().create_timer(success_display_time).timeout
+		emit_signal("ready_for_next_level")
+	else:
+		print("compare elements not successful " + chosen_element1.note + " " + chosen_element2.note)
+		#emit_signal("success",false, button_pressed)
+		note_on_staff.play_failure_effects()
+		await get_tree().create_timer(success_display_time).timeout
+		emit_signal("ready_for_next_level")
+
+func choose_element(element: NoteElement) -> void:
+	print("choose_element")
+	if not chosen_element1:
+		chosen_element1 = element
+		print("choosing_element1")
+	elif not chosen_element2:
+		chosen_element2 = element
+		print("choosing_element2")
+	else:
+		print("two elements already chosen")
+		
+func compare_elements() -> bool:
+	if chosen_element1.note == chosen_element2.note:
+		return true
+	else:
+		return false
+
+
 
 func disable_buttons(disabled: bool = true) -> void:
 	for button: Button in current_note_buttons:
@@ -219,16 +236,37 @@ func disable_buttons(disabled: bool = true) -> void:
 			button.mouse_filter = Control.MOUSE_FILTER_STOP
 			
 
-func get_user_input_new(element: Variant) -> void:
+func get_user_input_new(new_note: String, element: NoteElement) -> void:
+	print("get_user_input_new" + element.name)
 	choose_element(element)
+	if chosen_element1 and chosen_element2:
+		print("comparing elements")
+		determine_success_new()
+		await ready_for_next_level
+		timer_paused = false
+		disable_buttons(false)
+		clear_elements()
+		set_flash_cards_level(create_random_level_notes())
+		choose_element(note_on_staff)
+	else:
+		print("no two chosen elements " + chosen_element1.name + " " + chosen_element2.name)
+
+func clear_elements() -> void:
+	chosen_element1 = null
+	chosen_element2 = null
+
+func start_game(game: String) -> void:
+	pass
 
 func get_user_input(selected_note: String, button_pressed: Button = null) -> void:
 	input_enabled = false
 	disable_buttons()
 	recieved_note = selected_note
-	play_note(recieved_note)
+	#play_note(recieved_note)
+	timer_paused = true
 	determine_success(button_pressed)
 	await ready_for_next_level
+	timer_paused = false
 	disable_buttons(false)
 	set_flash_cards_level(create_random_level_notes())
 
