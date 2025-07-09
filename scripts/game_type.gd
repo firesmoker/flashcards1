@@ -1,6 +1,7 @@
 class_name GameType extends Node2D
 
 @export var game_name: String
+@onready var audio: Audio = $Audio
 
 var dark_background: Color = Color(0.078,0.122,0.141)
 #var light_background: Color = Color(1,1,0.992)
@@ -36,9 +37,7 @@ signal ready_for_next_level
 signal success
 signal fail
 signal change_theme
-@onready var helper_line: TextureRect = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/HelperLine"
-@onready var stem_axis: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
-@onready var audio: AudioStreamPlayer2D = $"../FlashCards/Audio"
+
 
 #func _ready() -> void:
 	#await get_tree().process_frame
@@ -108,12 +107,7 @@ func check_orientation() -> bool:
 
 
 
-func get_combined_buttons_width() -> float:
-	var combined_width: float = 0
-	for button: Button in current_note_buttons:
-		combined_width += button.size.x
-	#print(combined_width)
-	return combined_width
+
 
 
 func set_ui_theme(theme: String = "light") -> void:
@@ -140,7 +134,6 @@ func round_up(num: float) -> float:
 
 
 
-	
 
 
 func choose_element(element: NoteElement) -> void:

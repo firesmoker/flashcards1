@@ -10,7 +10,12 @@ class_name FlashCards extends GameType
 @onready var game_over_overlay: Panel = $"../FlashCards/GameUI/GameOverOverlay"
 @onready var restart_button: Button = $"../FlashCards/GameUI/GameOverOverlay/RestartButton"
 @onready var score_label: Label = $"../FlashCards/GameUI/ScoreLabel"
+@onready var helper_line: TextureRect = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/HelperLine"
+@onready var stem_axis: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
+#@onready var audio: AudioStreamPlayer2D = $"../FlashCards/Audio"
 var recieved_note: String
+@onready var keyboard: Control = $"../FlashCards/GameUI/Keyboard"
+var keys: Dictionary
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -31,6 +36,13 @@ func set_flash_cards_level(level_array: Array[String]) -> void:
 	change_level_note(new_note)
 	change_level_note_buttons(level_array)
 	input_enabled = true
+
+func init_keyboard() -> void:
+	for key: Button in keyboard.get_children():
+		keys[key] = key.text + "4"
+
+func get_played_key(key: Button) -> void:
+	get_user_input_new(key.note_element.note,key.note_element)
 
 func get_user_input_new(new_note: String, element: NoteElement) -> void:
 	print("get_user_input_new" + element.name)
@@ -208,3 +220,10 @@ func disable_buttons(disabled: bool = true) -> void:
 		else:
 			button.disabled = false
 			button.mouse_filter = Control.MOUSE_FILTER_STOP
+
+func get_combined_buttons_width() -> float:
+	var combined_width: float = 0
+	for button: Button in current_note_buttons:
+		combined_width += button.size.x
+	#print(combined_width)
+	return combined_width

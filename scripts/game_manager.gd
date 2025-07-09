@@ -15,7 +15,7 @@ var light_theme_staff_color: Color = Color(0.078,0.122,0.141,0.55)
 #var mode: Array[String] = ["level_timer","note_timer"]
 @onready var background: Panel = $"../GeneralUI/Background"
 static var current_game: String = "flash_cards"
-
+var current_game_instance: GameType
 
 #
 #var recieved_note: String
@@ -67,13 +67,22 @@ func start_game(game: String) -> void:
 	matching.toggle_visibility(false)
 	match game:
 		"flash_cards":
+			current_game_instance = flash_cards
 			flash_cards.process_mode = Node.PROCESS_MODE_INHERIT
 			await flash_cards.ready
 			flash_cards.toggle_visibility(true)
 		"matching":
+			current_game_instance = matching
 			matching.process_mode = Node.PROCESS_MODE_INHERIT
 			await matching.ready
 			matching.toggle_visibility(true)
+
+func set_current_game_instance() -> void:
+	match current_game:
+		"flash_cards":
+			current_game_instance = flash_cards
+		"matching":
+			current_game_instance = matching
 
 #func _ready() -> void:
 	#initialize_ui()
@@ -159,7 +168,12 @@ func set_ui_theme(theme: String = "light") -> void:
 			background.self_modulate = dark_background
 			emit_signal("change_theme","dark")
 #
-#
+
+func get_current_game_instance() -> GameType:
+	if not current_game_instance:
+		set_current_game_instance()
+	return current_game_instance
+
 #func update_timer(delta: float, round: bool = true) -> void:
 	#if not timer_paused:
 		#level_timer -= delta

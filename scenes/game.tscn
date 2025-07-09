@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ltddoqjoj2tw"]
+[gd_scene load_steps=13 format=3 uid="uid://ltddoqjoj2tw"]
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="1_u5sy4"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://bqh8wbe5atnvm" path="res://click2.wav" id="5_iywne"]
 [ext_resource type="Script" uid="uid://djudq1etxfxjb" path="res://scripts/audio.gd" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://psxh0dfvvojf" path="res://scripts/flash_cards.gd" id="9_0tnpc"]
+[ext_resource type="Script" uid="uid://brysmm558rcjh" path="res://scripts/key.gd" id="9_vtaks"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gee14"]
 
@@ -387,6 +388,44 @@ text = "E"
 script = ExtResource("1_lnu2h")
 metadata/_edit_use_anchors_ = true
 
+[node name="Keyboard" type="Control" parent="FlashCards/GameUI"]
+layout_direction = 2
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -264.0
+offset_top = -389.0
+offset_right = 264.0
+offset_bottom = -171.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="KeyC" type="Button" parent="FlashCards/GameUI/Keyboard"]
+layout_mode = 0
+offset_right = 170.0
+offset_bottom = 205.0
+text = "C"
+script = ExtResource("9_vtaks")
+
+[node name="KeyD" type="Button" parent="FlashCards/GameUI/Keyboard"]
+layout_mode = 0
+offset_left = 177.0
+offset_right = 347.0
+offset_bottom = 205.0
+text = "D"
+script = ExtResource("9_vtaks")
+
+[node name="KeyE" type="Button" parent="FlashCards/GameUI/Keyboard"]
+layout_mode = 0
+offset_left = 354.0
+offset_right = 524.0
+offset_bottom = 205.0
+text = "E"
+script = ExtResource("9_vtaks")
+
 [node name="Audio" type="AudioStreamPlayer2D" parent="FlashCards"]
 stream = ExtResource("5_iywne")
 script = ExtResource("6_p57ef")
@@ -401,6 +440,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lnu2h")
 metadata/_edit_lock_ = true
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_iywne")
+script = ExtResource("6_p57ef")
 
 [connection signal="button_up" from="Matching/GameUI/GameOverOverlay/RestartButton" to="GameManager" method="restart_game"]
 [connection signal="button_up" from="FlashCards/GameUI/GameOverOverlay/RestartButton" to="GameManager" method="restart_game"]
