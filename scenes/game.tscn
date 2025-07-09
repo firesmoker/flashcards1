@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c07k4f0olalll" path="res://scripts/note_button.gd" id="1_lnu2h"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="1_u5sy4"]
-[ext_resource type="Script" uid="uid://1dkmplxx6oyq" path="res://scripts/game_type.gd" id="2_gee14"]
+[ext_resource type="Script" uid="uid://psxh0dfvvojf" path="res://scripts/flash_cards.gd" id="2_gee14"]
 [ext_resource type="Script" uid="uid://jrd0g2onaav4" path="res://scripts/game_manager.gd" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://chc5qyesyhvcs" path="res://scenes/note_on_staff.tscn" id="3_p57ef"]
 [ext_resource type="Script" uid="uid://dvit68xy04kto" path="res://scripts/note_container.gd" id="3_u5sy4"]
@@ -31,7 +31,7 @@ bg_color = Color(1, 1, 1, 1)
 unique_name_in_owner = true
 script = ExtResource("2_yqjtg")
 
-[node name="FlashCards" type="Node" parent="."]
+[node name="FlashCards" type="Node2D" parent="."]
 script = ExtResource("2_gee14")
 
 [node name="GameUI" type="CanvasLayer" parent="FlashCards"]

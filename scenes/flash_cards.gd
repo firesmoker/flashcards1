@@ -1,1 +1,0 @@
-class_name FlashCards extends GameType

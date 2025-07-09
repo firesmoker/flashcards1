@@ -9,6 +9,7 @@ var wrong_sound: AudioStream
 var success_texture: Texture2D
 var success_stylebox: StyleBox
 var note_element: NoteElement = NoteElement.new()
+@onready var current_game: GameType
 
 func _ready() -> void:
 	#success_texture = preload("res://button_success_texture.tres")
@@ -16,10 +17,20 @@ func _ready() -> void:
 	#theme.set_stylebox("disabled","Button",success_stylebox)
 	#click_sound = preload("res://click2.wav")
 	#wrong_sound = preload("res://wrong1.wav")
-	connect("note_pressed",game_manager.get_user_input_new)
-	connect("button_up",press_button)
-	connect("button_down",press_down_button)
-	game_manager.success.connect(flash_by_succes)
+	connect_to_current_game()
+	#connect("note_pressed",game_manager.get_user_input_new)
+	#connect("button_up",press_button)
+	#connect("button_down",press_down_button)
+	
+
+func connect_to_current_game() -> void:
+	match game_manager.current_game:
+		"flash_cards": 
+			current_game = get_node("/root/Game/FlashCards")
+			connect("note_pressed",current_game.get_user_input_new)
+			connect("button_up",press_button)
+			connect("button_down",press_down_button)
+			current_game.success.connect(flash_by_succes)
 
 func change_note(new_note: String = "F") -> void:
 	note_element.note = new_note
@@ -34,7 +45,7 @@ func press_button() -> void:
 	
 func press_down_button() -> void:
 	Input.vibrate_handheld(10)
-	game_manager.play_note(note_element.note)
+	current_game.play_note(note_element.note)
 
 func flash_by_succes(success: bool, button_pressed: Button) -> void:
 	if button_pressed == self:
