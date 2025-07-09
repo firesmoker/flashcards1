@@ -162,14 +162,7 @@ func compare_elements() -> bool:
 
 
 
-func disable_buttons(disabled: bool = true) -> void:
-	for button: Button in current_note_buttons:
-		if disabled:
-			button.disabled = true
-			button.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		else:
-			button.disabled = false
-			button.mouse_filter = Control.MOUSE_FILTER_STOP
+
 			
 
 #func get_user_input_new(new_note: String, element: NoteElement) -> void:

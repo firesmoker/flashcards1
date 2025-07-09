@@ -37,6 +37,7 @@ func get_user_input_new(new_note: String, element: NoteElement) -> void:
 	choose_element(element)
 	if chosen_element1 and chosen_element2:
 		print("comparing elements")
+		disable_buttons(true)
 		determine_success_new()
 		await ready_for_next_level
 		timer_paused = false
@@ -198,3 +199,12 @@ func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
 		level_notes.append(temporary_notes_bank[random_note_index])
 		temporary_notes_bank.pop_at(random_note_index)
 	return level_notes
+
+func disable_buttons(disabled: bool = true) -> void:
+	for button: Button in current_note_buttons:
+		if disabled:
+			button.disabled = true
+			button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			button.disabled = false
+			button.mouse_filter = Control.MOUSE_FILTER_STOP
