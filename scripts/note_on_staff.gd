@@ -36,7 +36,8 @@ func set_element_theme(theme: String = "light") -> void:
 	match theme:
 		"light":
 			print(self.name + " set to light theme")
-			note_display.self_modulate = game_manager.light_background
+			#note_display.self_modulate = game_manager.light_background
+			note_display.self_modulate = Color.WHITE
 			#note_image.modulate = game_manager.light_theme_note_color
 			set_note_color(game_manager.light_theme_note_color)
 			staff.modulate = game_manager.light_theme_staff_color

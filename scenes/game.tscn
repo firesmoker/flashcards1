@@ -8,8 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://bqh8wbe5atnvm" path="res://click2.wav" id="5_iywne"]
 [ext_resource type="Script" uid="uid://djudq1etxfxjb" path="res://scripts/audio.gd" id="6_p57ef"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gee14"]
 
 [sub_resource type="GDScript" id="GDScript_lnu2h"]
 script/source = "extends Control
@@ -22,24 +21,108 @@ func set_buttons_notes() -> void:
 		button.change_note(\"G\")
 "
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gee14"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnu2h"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="Game" type="Node2D"]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="GameManager" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_yqjtg")
 
-[node name="Background" type="Panel" parent="UI"]
+[node name="FlashCards" type="Node" parent="."]
+
+[node name="GameUI" type="CanvasLayer" parent="FlashCards"]
+layer = 2
+
+[node name="NoteContainer" type="Control" parent="FlashCards/GameUI"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -172.5
+offset_right = 160.0
+offset_bottom = 172.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_u5sy4")
+note_on_staff = ExtResource("3_p57ef")
+
+[node name="NoteOnStaff" parent="FlashCards/GameUI" instance=ExtResource("3_p57ef")]
+
+[node name="ScoreLabel" type="Label" parent="FlashCards/GameUI"]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 18.0
+offset_top = 23.0
+offset_right = 210.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 60
+text = "Score: "
+metadata/_edit_use_anchors_ = true
+
+[node name="GameOverOverlay" type="Panel" parent="FlashCards/GameUI"]
+visible = false
+z_index = 100
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_lnu2h")
-metadata/_edit_lock_ = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_gee14")
 
-[node name="TimerLabel" type="Label" parent="UI/Background"]
+[node name="Label" type="Label" parent="FlashCards/GameUI/GameOverOverlay"]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+
+[node name="RestartButton" type="Button" parent="FlashCards/GameUI/GameOverOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.5
+offset_top = 73.0
+offset_right = 126.5
+offset_bottom = 177.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = "Restart"
+
+[node name="TimerBar" type="ProgressBar" parent="FlashCards/GameUI"]
+modulate = Color(1, 0.435294, 0.25098, 1)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -119.0
+offset_top = 402.0
+offset_right = 221.0
+offset_bottom = 453.0
+grow_horizontal = 0
+rotation = -1.5708
+max_value = 20.0
+value = 20.0
+show_percentage = false
+
+[node name="TimerLabel" type="Label" parent="FlashCards/GameUI"]
+self_modulate = Color(0, 0, 0, 1)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -50,8 +133,8 @@ theme_override_font_sizes/font_size = 60
 text = "Time"
 metadata/_edit_use_anchors_ = true
 
-[node name="NoteButtons" type="Control" parent="UI/Background"]
-layout_mode = 1
+[node name="NoteButtons" type="Control" parent="FlashCards/GameUI"]
+layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -64,7 +147,7 @@ grow_vertical = 0
 script = SubResource("GDScript_lnu2h")
 metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="UI/Background/NoteButtons"]
+[node name="Button" type="Button" parent="FlashCards/GameUI/NoteButtons"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -78,7 +161,7 @@ theme_override_font_sizes/font_size = 40
 text = "C"
 script = ExtResource("1_lnu2h")
 
-[node name="Button2" type="Button" parent="UI/Background/NoteButtons"]
+[node name="Button2" type="Button" parent="FlashCards/GameUI/NoteButtons"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -97,7 +180,7 @@ text = "D"
 script = ExtResource("1_lnu2h")
 metadata/_edit_use_anchors_ = true
 
-[node name="Button3" type="Button" parent="UI/Background/NoteButtons"]
+[node name="Button3" type="Button" parent="FlashCards/GameUI/NoteButtons"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -115,94 +198,19 @@ text = "E"
 script = ExtResource("1_lnu2h")
 metadata/_edit_use_anchors_ = true
 
-[node name="NoteContainer" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -172.5
-offset_right = 160.0
-offset_bottom = 172.5
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("3_u5sy4")
-note_on_staff = ExtResource("3_p57ef")
+[node name="Audio" type="AudioStreamPlayer2D" parent="FlashCards"]
+stream = ExtResource("5_iywne")
+script = ExtResource("6_p57ef")
 
-[node name="NoteOnStaff" parent="UI" instance=ExtResource("3_p57ef")]
+[node name="GeneralUI" type="CanvasLayer" parent="."]
 
-[node name="ScoreLabel" type="Label" parent="UI"]
-self_modulate = Color(0, 0, 0, 1)
-offset_left = 18.0
-offset_top = 23.0
-offset_right = 210.0
-offset_bottom = 106.0
-theme_override_font_sizes/font_size = 60
-text = "Score: "
-metadata/_edit_use_anchors_ = true
-
-[node name="GameOverOverlay" type="Panel" parent="UI"]
-visible = false
-z_index = 100
+[node name="Background" type="Panel" parent="GeneralUI"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_gee14")
+theme_override_styles/panel = SubResource("StyleBoxFlat_lnu2h")
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="UI/GameOverOverlay"]
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 100
-text = "Game Over"
-
-[node name="RestartButton" type="Button" parent="UI/GameOverOverlay"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -126.5
-offset_top = 73.0
-offset_right = 126.5
-offset_bottom = 177.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 70
-text = "Restart"
-
-[node name="TimerBar" type="ProgressBar" parent="UI"]
-modulate = Color(1, 0.435294, 0.25098, 1)
-offset_left = 1054.0
-offset_top = 451.0
-offset_right = 1394.0
-offset_bottom = 502.0
-rotation = -1.5708
-max_value = 20.0
-value = 20.0
-show_percentage = false
-
-[node name="GameManager" type="Node2D" parent="."]
-unique_name_in_owner = true
-script = ExtResource("2_yqjtg")
-
-[node name="Audio" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_iywne")
-script = ExtResource("6_p57ef")
-
-[connection signal="button_up" from="UI/GameOverOverlay/RestartButton" to="GameManager" method="restart_game"]
+[connection signal="button_up" from="FlashCards/GameUI/GameOverOverlay/RestartButton" to="GameManager" method="restart_game"]

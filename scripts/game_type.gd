@@ -1,7 +1,7 @@
 class_name GameType extends Node2D
 
 var mode: Array[String] = ["level_timer","note_timer"]
-@onready var timer_bar: ProgressBar = $"../UI/TimerBar"
+@onready var timer_bar: ProgressBar = $"../FlashCards/GameUI/TimerBar"
 
 var recieved_note: String
 var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
@@ -14,16 +14,16 @@ var level_timer: float = 20
 var max_level_timer: float = 20
 var input_enabled: bool = true
 var timer_paused: bool = false
-@onready var note_on_staff: NoteElement = $"../UI/NoteOnStaff"
+@onready var note_on_staff: NoteElement = $"../FlashCards/GameUI/NoteOnStaff"
 
-@onready var score_label: Label = $"../UI/ScoreLabel"
-@onready var timer_label: Label = $"../UI/Background/TimerLabel"
-@onready var staff: Control = $"../UI/NoteOnStaff/NoteDisplay/Staff"
-@onready var note_name: Label = $"../UI/NoteOnStaff/NoteDisplay/NoteName"
-@onready var note_buttons: Control = $"../UI/Background/NoteButtons"
-@onready var note_image: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage"
-@onready var game_over_overlay: Panel = $"../UI/GameOverOverlay"
-@onready var restart_button: Button = $"../UI/GameOverOverlay/RestartButton"
+@onready var score_label: Label = $"../FlashCards/GameUI/ScoreLabel"
+@onready var timer_label: Label = $"../FlashCards/GameUI/Background/TimerLabel"
+@onready var staff: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/Staff"
+@onready var note_name: Label = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteName"
+@onready var note_buttons: Control = $"../FlashCards/GameUI/Background/NoteButtons"
+@onready var note_image: TextureRect = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage"
+@onready var game_over_overlay: Panel = $"../FlashCards/GameUI/GameOverOverlay"
+@onready var restart_button: Button = $"../FlashCards/GameUI/GameOverOverlay/RestartButton"
 
 var chosen_element1: NoteElement
 var chosen_element2: NoteElement
@@ -32,8 +32,8 @@ signal ready_for_next_level
 signal success
 signal fail
 signal change_theme
-@onready var helper_line: TextureRect = $"../UI/NoteOnStaff/NoteDisplay/NoteImage/HelperLine"
-@onready var stem_axis: Control = $"../UI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
+@onready var helper_line: TextureRect = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/HelperLine"
+@onready var stem_axis: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
 @onready var audio: AudioStreamPlayer2D = $"../Audio"
 
 func _ready() -> void:
