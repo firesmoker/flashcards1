@@ -1,6 +1,8 @@
 class_name NoteElement extends Control
 
 ##C is red, D is orange, E is yellow, F is green, G is light blue, A is blue, and B is violet,
+var source: Variant
+var note: String
 
 static var notes_properties: Dictionary = {
 	"A4":{"location":5,"color": Color(0,0.697,0.697)},
@@ -13,7 +15,6 @@ static var notes_properties: Dictionary = {
 }
 static var stem_reverse_location_threshold: int
 
-var note: String
 @onready var game_manager: GameManager = %GameManager
 
 func _ready() -> void:

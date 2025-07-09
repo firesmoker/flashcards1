@@ -1,10 +1,6 @@
 class_name GameType extends Node2D
 
-
-
-
-
-@onready var flash_cards: GameType = $"../FlashCards"
+@export var game_name: String
 
 var dark_background: Color = Color(0.078,0.122,0.141)
 #var light_background: Color = Color(1,1,0.992)
@@ -16,7 +12,7 @@ var light_theme_staff_color: Color = Color(0.078,0.122,0.141,0.55)
 var mode: Array[String] = ["level_timer","note_timer"]
 @onready var background: Panel = $"../GeneralUI/Background"
 
-var recieved_note: String
+#var recieved_note: String
 var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
 var current_score: int = 0
 var success_time_bonus: float = 1
@@ -28,16 +24,9 @@ var max_level_timer: float = 20
 var input_enabled: bool = true
 var timer_paused: bool = false
 
-@onready var note_on_staff: NoteElement = $"../FlashCards/GameUI/NoteOnStaff"
-@onready var timer_bar: ProgressBar = $"../FlashCards/GameUI/TimerBar"
-@onready var timer_label: Label = $"../FlashCards/GameUI/TimerLabel"
-@onready var staff: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/Staff"
-@onready var note_name: Label = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteName"
-@onready var note_buttons: Control = $"../FlashCards/GameUI/NoteButtons"
-@onready var note_image: TextureRect = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage"
-@onready var game_over_overlay: Panel = $"../FlashCards/GameUI/GameOverOverlay"
-@onready var restart_button: Button = $"../FlashCards/GameUI/GameOverOverlay/RestartButton"
-@onready var score_label: Label = $"../FlashCards/GameUI/ScoreLabel"
+
+var game_ui: CanvasLayer
+
 
 var first_flash_cards_run: bool = true
 var chosen_element1: NoteElement
@@ -61,17 +50,18 @@ signal change_theme
 #func get_user_input() -> void:
 	#pass
 
-func _process(delta: float) -> void:
-	update_timer(delta)
-	#adjust_success_time_bonus(delta)
+#func _process(delta: float) -> void:
+	#update_timer(delta)
+	##adjust_success_time_bonus(delta)
 
-func initialize_ui() -> void:
-	#set_ui_theme("light")
-	input_enabled = true
-	check_orientation()
-	organize_ui_buttons()
-	game_over_overlay.visible = false
-	score_label.text = "Score: 0"
+
+
+func toggle_visibility(toggle: bool = true) -> void:
+	if not game_ui:
+		var game_ui_path: String = "../" + game_name + "/GameUI"
+		game_ui = get_node(game_ui_path)
+	self.visible = toggle
+	game_ui.visible = toggle
 
 func adjust_success_time_bonus(delta: float) -> void:
 	success_time_bonus *= 0.9997 * delta
@@ -116,12 +106,7 @@ func check_orientation() -> bool:
 		print("Now in Landscape")
 		return false
 
-func organize_ui_buttons(landscape: bool = true) -> void:
-	current_note_buttons = note_buttons.get_children()
-	note_buttons.size.x = get_viewport_rect().size.x / 2
-	if note_buttons.size.x < get_combined_buttons_width():
-		note_buttons.size.x = get_combined_buttons_width()
-	note_buttons.position.x = (get_viewport_rect().size.x - note_buttons.size.x) / 2
+
 
 func get_combined_buttons_width() -> float:
 	var combined_width: float = 0
@@ -141,17 +126,7 @@ func set_ui_theme(theme: String = "light") -> void:
 			emit_signal("change_theme","dark")
 
 
-func update_timer(delta: float, round: bool = true) -> void:
-	if not timer_paused:
-		level_timer -= delta
-	var display_timer: int = round_up(level_timer)
-	if display_timer < 0:
-		display_timer = 0
-	#timer_label.text = "Time: " + var_to_str(display_timer)
-	timer_bar.value = display_timer
-	#print(level_timer)
-	if level_timer <= 0:
-		game_over()
+
 
 
 func round_up(num: float) -> float:
@@ -161,63 +136,12 @@ func round_up(num: float) -> float:
 	else:
 		return new_num
 
-func game_over() -> void:
-	input_enabled = false
-	game_over_overlay.visible = true
 
 
-func update_score(points: int) -> void:
-	current_score += points
-	score_label.text = "Score: " + var_to_str(current_score)
-	if max_score < current_score:
-		max_score = current_score
-	
-func change_level_note(new_note: String) -> void:
-	#note_on_staff.note = new_note
-	#note_name.text = note_on_staff.note[0]
-	note_on_staff.change_note(new_note)
+
+
 	
 
-func toggle_note_name(toggle: bool) -> void:
-	note_name.visible = toggle
-	note_image.visible = !toggle
-	staff.visible = !toggle
-
-func determine_success(button_pressed: Button = null) -> bool:
-	if recieved_note == note_on_staff.note:
-		emit_signal("success",true, button_pressed)
-		update_score(success_score_bonus)
-		level_timer += success_time_bonus
-		if level_timer >= max_level_timer:
-			level_timer = max_level_timer
-		note_on_staff.play_success_effects()
-		await get_tree().create_timer(success_display_time).timeout
-		emit_signal("ready_for_next_level")
-		return true
-	else:
-		emit_signal("success",false, button_pressed)
-		note_on_staff.play_failure_effects()
-		await get_tree().create_timer(success_display_time).timeout
-		emit_signal("ready_for_next_level")
-		return false
-
-func determine_success_new() -> void:
-	if compare_elements():
-		print("compare elements successful " + chosen_element1.note + " " + chosen_element2.note)
-		#emit_signal("success",true, button_pressed)
-		update_score(success_score_bonus)
-		level_timer += success_time_bonus
-		if level_timer >= max_level_timer:
-			level_timer = max_level_timer
-		note_on_staff.play_success_effects()
-		await get_tree().create_timer(success_display_time).timeout
-		emit_signal("ready_for_next_level")
-	else:
-		print("compare elements not successful " + chosen_element1.note + " " + chosen_element2.note)
-		#emit_signal("success",false, button_pressed)
-		note_on_staff.play_failure_effects()
-		await get_tree().create_timer(success_display_time).timeout
-		emit_signal("ready_for_next_level")
 
 func choose_element(element: NoteElement) -> void:
 	print("choose_element")
@@ -294,25 +218,7 @@ func play_note(note: String) -> void:
 
 
 
-func change_level_note_buttons(notes_array: Array[String]) -> void:
-	var number_of_buttons: int = notes_array.size()
-	print (number_of_buttons)
-	for i in range(0,number_of_buttons):
-		var random_note_index: int = randi_range(0,notes_array.size()-1)
-		var new_note: String = notes_array[random_note_index]
-		#print("changing button: " + current_note_buttons[i].name + "to new note: " + new_note)
-		print("new note for button: "  + new_note)
-		current_note_buttons[i].change_note(new_note)
-		notes_array.pop_at(random_note_index)
 
-func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
-	var temporary_notes_bank: Array[String] = notes_bank.duplicate()
-	var level_notes: Array[String]
-	for i in range(0,number_of_buttons):
-		var random_note_index: int = randi_range(0,temporary_notes_bank.size()-1)
-		level_notes.append(temporary_notes_bank[random_note_index])
-		temporary_notes_bank.pop_at(random_note_index)
-	return level_notes
 	
 func restart_game() -> void:
 	get_tree().reload_current_scene()

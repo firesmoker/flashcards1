@@ -12,6 +12,8 @@ var note_element: NoteElement = NoteElement.new()
 @onready var current_game: GameType
 
 func _ready() -> void:
+	note_element.source = self
+	#print(note_element.source)
 	#success_texture = preload("res://button_success_texture.tres")
 	#success_stylebox = preload("res://button_style_box.tres")
 	#theme.set_stylebox("disabled","Button",success_stylebox)
@@ -30,7 +32,7 @@ func connect_to_current_game() -> void:
 			connect("note_pressed",current_game.get_user_input_new)
 			connect("button_up",press_button)
 			connect("button_down",press_down_button)
-			current_game.success.connect(flash_by_succes)
+			current_game.success.connect(flash_by_success)
 
 func change_note(new_note: String = "F") -> void:
 	note_element.note = new_note
@@ -40,18 +42,20 @@ func change_note(new_note: String = "F") -> void:
 
 func press_button() -> void:
 	#emit_signal("note_pressed",note, self)
-	print("chosen note in button " + note_element.note)
+	#print("chosen note in button " + note_element.note)
 	emit_signal("note_pressed",note_element.note, note_element)
 	
 func press_down_button() -> void:
 	Input.vibrate_handheld(10)
 	current_game.play_note(note_element.note)
 
-func flash_by_succes(success: bool, button_pressed: Button) -> void:
-	if button_pressed == self:
+func flash_by_success(success: bool, source: Variant)-> void:
+	print(source.name + ", compared to button: " + self.name + " " + str(self.get_path()))
+	if source == self:
 		if success:
-			print(NoteElement.notes_properties[button_pressed.note]["color"])
-			flash_color(NoteElement.notes_properties[button_pressed.note]["color"])
+			print("successful button: " + self.name)
+			#print(NoteElement.notes_properties[note_element.note]["color"])
+			flash_color(NoteElement.notes_properties[note_element.note]["color"])
 			#audio.stream = audio.get_sound("click")
 			#audio.play()
 		else:
@@ -59,13 +63,15 @@ func flash_by_succes(success: bool, button_pressed: Button) -> void:
 			#audio.stream = audio.get_sound("wrong")
 			#audio.play()
 	else:
-		flash_color(Color(0,0,0,0.5))
+		pass
+		#flash_color(Color(0,0,0,0.5))
 
 func flash_color(new_color: Color = Color.GREEN, time: float = 0.5) -> void:
 	#add_theme_stylebox_override("disabled",success_stylebox)
 	#remove_theme_stylebox_override("disabled")
 	#if has_theme_stylebox_override("disabled"):
 		#get_theme_stylebox("disabled").bg_color = new_color
+	print("flashing color")
 	self.modulate = new_color
 	await get_tree().create_timer(time).timeout
 	self.modulate = Color.WHITE

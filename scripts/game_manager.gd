@@ -1,6 +1,10 @@
 class_name GameManager extends Node2D
 #@onready var flash_cards: GameType = $"../FlashCards"
-#
+
+@onready var flash_cards: FlashCards = $"../FlashCards"
+@onready var matching: GameType = $"../Matching"
+
+
 var dark_background: Color = Color(0.078,0.122,0.141)
 #var light_background: Color = Color(1,1,0.992)
 var light_background: Color = Color.REBECCA_PURPLE
@@ -10,7 +14,8 @@ var dark_theme_staff_color: Color = Color(1,1,0.992,0.55)
 var light_theme_staff_color: Color = Color(0.078,0.122,0.141,0.55)
 #var mode: Array[String] = ["level_timer","note_timer"]
 @onready var background: Panel = $"../GeneralUI/Background"
-var current_game: String = "flash_cards"
+static var current_game: String = "flash_cards"
+
 
 #
 #var recieved_note: String
@@ -48,6 +53,28 @@ signal change_theme
 #@onready var stem_axis: Control = $"../FlashCards/GameUI/NoteOnStaff/NoteDisplay/NoteImage/StemAxis"
 #@onready var audio: AudioStreamPlayer2D = $"../FlashCards/Audio"
 #
+
+
+func _ready() -> void:
+	print("yo yo")
+	start_game(current_game)
+	
+	
+func start_game(game: String) -> void:
+	flash_cards.process_mode = Node.PROCESS_MODE_DISABLED
+	flash_cards.toggle_visibility(false)
+	matching.process_mode = Node.PROCESS_MODE_DISABLED
+	matching.toggle_visibility(false)
+	match game:
+		"flash_cards":
+			flash_cards.process_mode = Node.PROCESS_MODE_INHERIT
+			await flash_cards.ready
+			flash_cards.toggle_visibility(true)
+		"matching":
+			matching.process_mode = Node.PROCESS_MODE_INHERIT
+			await matching.ready
+			matching.toggle_visibility(true)
+
 #func _ready() -> void:
 	#initialize_ui()
 	#set_flash_cards_level(create_random_level_notes())

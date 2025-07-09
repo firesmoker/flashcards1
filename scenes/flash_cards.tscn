@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://domprmop5m1di"]
+[gd_scene load_steps=11 format=3 uid="uid://dffalayuxcqxx"]
 
 [ext_resource type="Script" uid="uid://psxh0dfvvojf" path="res://scripts/flash_cards.gd" id="1_ofagi"]
 [ext_resource type="Theme" uid="uid://d07lglt4aywr4" path="res://ui_theme.tres" id="2_jmqm5"]
