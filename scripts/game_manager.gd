@@ -1,5 +1,5 @@
 class_name GameManager extends Node2D
-@onready var flash_cards: Node = $"../FlashCards"
+@onready var flash_cards: GameType = $"../FlashCards"
 
 var dark_background: Color = Color(0.078,0.122,0.141)
 #var light_background: Color = Color(1,1,0.992)
@@ -283,8 +283,7 @@ func play_note(note: String) -> void:
 
 func set_flash_cards_level(level_array: Array[String]) -> void:
 	if first_flash_cards_run:
-		await note_on_staff.ready
-		await note_buttons.ready
+		await flash_cards.ready
 		first_flash_cards_run = false
 	print("all ready")
 	toggle_note_name(false)
