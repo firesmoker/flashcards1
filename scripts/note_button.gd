@@ -26,7 +26,7 @@ func _ready() -> void:
 	
 
 func connect_to_current_game() -> void:
-	match game_manager.current_game:
+	match GameManager.current_game:
 		"flash_cards": 
 			current_game = get_node("/root/Game/FlashCards")
 			connect("note_pressed",current_game.get_user_input_new)

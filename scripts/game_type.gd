@@ -14,16 +14,9 @@ var mode: Array[String] = ["level_timer","note_timer"]
 @onready var background: Panel = $"../GeneralUI/Background"
 
 #var recieved_note: String
-var notes_bank: Array[String] = ["A4","B4","C4","D4","E4","F4","G4",]
-var current_score: int = 0
-var success_time_bonus: float = 1
-var success_score_bonus: float = 10
-var success_display_time: float = 0.5
-static var max_score: int = 0
-var level_timer: float = 20
-var max_level_timer: float = 20
+var notes_bank: Array[String] = ["C4","D4","E4","F4","G4","A4","B4",]
+
 var input_enabled: bool = true
-var timer_paused: bool = false
 
 
 var game_ui: CanvasLayer
@@ -59,13 +52,11 @@ func toggle_visibility(toggle: bool = true) -> void:
 	if not game_ui:
 		var game_ui_path: String = "../" + game_name + "/GameUI"
 		game_ui = get_node(game_ui_path)
+		print(game_ui.name + "is now")
 	self.visible = toggle
 	game_ui.visible = toggle
 
-func adjust_success_time_bonus(delta: float) -> void:
-	success_time_bonus *= 0.9997 * delta
-	if success_time_bonus <= success_display_time:
-		success_time_bonus = success_display_time
+
 
 #func _input(event: InputEvent) -> void:
 	#if event is InputEventKey and event.pressed and not event.echo and input_enabled:
@@ -155,23 +146,6 @@ func compare_elements() -> bool:
 
 
 
-
-			
-
-#func get_user_input_new(new_note: String, element: NoteElement) -> void:
-	#print("get_user_input_new" + element.name)
-	#choose_element(element)
-	#if chosen_element1 and chosen_element2:
-		#print("comparing elements")
-		#determine_success_new()
-		#await ready_for_next_level
-		#timer_paused = false
-		#disable_buttons(false)
-		#clear_elements()
-		#set_flash_cards_level(create_random_level_notes())
-		#choose_element(note_on_staff)
-	#else:
-		#print("no two chosen elements " + chosen_element1.name + " " + chosen_element2.name)
 
 func clear_elements() -> void:
 	chosen_element1 = null

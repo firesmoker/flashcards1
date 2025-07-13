@@ -2,7 +2,7 @@ class_name GameManager extends Node2D
 #@onready var flash_cards: GameType = $"../FlashCards"
 
 @onready var flash_cards: FlashCards = $"../FlashCards"
-@onready var matching: GameType = $"../Matching"
+#@onready var matching: GameType = $"../Matching"
 
 
 var dark_background: Color = Color(0.078,0.122,0.141)
@@ -63,26 +63,27 @@ func _ready() -> void:
 func start_game(game: String) -> void:
 	flash_cards.process_mode = Node.PROCESS_MODE_DISABLED
 	flash_cards.toggle_visibility(false)
-	matching.process_mode = Node.PROCESS_MODE_DISABLED
-	matching.toggle_visibility(false)
+	#if matching:
+	#matching.process_mode = Node.PROCESS_MODE_DISABLED
+	#matching.toggle_visibility(false)
 	match game:
 		"flash_cards":
 			current_game_instance = flash_cards
 			flash_cards.process_mode = Node.PROCESS_MODE_INHERIT
 			await flash_cards.ready
 			flash_cards.toggle_visibility(true)
-		"matching":
-			current_game_instance = matching
-			matching.process_mode = Node.PROCESS_MODE_INHERIT
-			await matching.ready
-			matching.toggle_visibility(true)
+		#"matching":
+			#current_game_instance = matching
+			#matching.process_mode = Node.PROCESS_MODE_INHERIT
+			#await matching.ready
+			#matching.toggle_visibility(true)
 
 func set_current_game_instance() -> void:
 	match current_game:
 		"flash_cards":
 			current_game_instance = flash_cards
-		"matching":
-			current_game_instance = matching
+		#"matching":
+			#current_game_instance = matching
 
 #func _ready() -> void:
 	#initialize_ui()

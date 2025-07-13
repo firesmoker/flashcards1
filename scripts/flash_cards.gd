@@ -16,6 +16,14 @@ class_name FlashCards extends GameType
 var recieved_note: String
 @onready var keyboard: Control = $"../FlashCards/GameUI/Keyboard"
 var keys: Dictionary
+var current_score: int = 0
+var success_time_bonus: float = 1
+var success_score_bonus: float = 10
+var success_display_time: float = 0.5
+static var max_score: int = 0
+var level_timer: float = 20
+var timer_paused: bool = false
+var max_level_timer: float = 20
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -172,8 +180,6 @@ func determine_success(button_pressed: Button = null) -> bool:
 
 func determine_success_new() -> void:
 	if compare_elements():
-		print("compare elements successful " + chosen_element1.note + " " + chosen_element2.note)
-		print(chosen_element2.source)
 		if chosen_element2.source is NoteButton:
 			print("element is button")
 			emit_signal("success",true,chosen_element2.source)
@@ -203,8 +209,14 @@ func change_level_note_buttons(notes_array: Array[String]) -> void:
 		current_note_buttons[i].change_note(new_note)
 		notes_array.pop_at(random_note_index)
 
-func create_random_level_notes(number_of_buttons: int = 3) -> Array[String]:
-	var temporary_notes_bank: Array[String] = notes_bank.duplicate()
+func create_random_level_notes(number_of_buttons: int = 3, notes_range: int = 3) -> Array[String]:
+	#var temporary_notes_bank: Array[String] = notes_bank.duplicate()
+	
+	var temporary_notes_bank: Array[String]
+	for i in notes_range:
+		temporary_notes_bank.append(notes_bank[i])
+		
+		
 	var level_notes: Array[String]
 	for i in range(0,number_of_buttons):
 		var random_note_index: int = randi_range(0,temporary_notes_bank.size()-1)
@@ -227,3 +239,8 @@ func get_combined_buttons_width() -> float:
 		combined_width += button.size.x
 	#print(combined_width)
 	return combined_width
+
+func adjust_success_time_bonus(delta: float) -> void:
+	success_time_bonus *= 0.9997 * delta
+	if success_time_bonus <= success_display_time:
+		success_time_bonus = success_display_time
